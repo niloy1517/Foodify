@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+.hero {
+    background-image: url('assets/hero.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+.slide-bar {
+    animation: forwards;
+    animation-name: slide;
+    animation-duration: 1s;
+}
+
+
+@keyframes slide {
+    from {
+        width: 0%;
+    }
+
+    to {
+        width: 420px;
+    }
+}
+
+
+.markdown-input {
+    @apply w-full border border-gray-300 rounded-md px-3 h-14  text-base 
+               focus:border-gray-700 focus:outline-none;
+}
+
+.markdown-label {
+    @apply absolute left-3 top-3 text-gray-500 bg-white px-1 pointer-events-none
+    transition-all duration-200
+    peer-placeholder-shown:top-3 peer-placeholder-shown:text-base
+    peer-focus:-top-2 peer-focus:text-sm peer-focus:text-gray-700
+    peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-sm;
+}
+
+
+.slick-slide > div {
+    margin: 0 10px;
+}
+
+
