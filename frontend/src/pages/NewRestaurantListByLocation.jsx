@@ -73,7 +73,7 @@ const NewRestaurantListByLocation = () => {
         <div className='w-full pt-8'>
             <h1 className='text-3xl font-semibold text-gray-700 pb-6'>New on Foodify</h1>
             <div className='w-full relative'>
-                <button className="hidden md:flex swiper-button-prev-custom p-3 rounded-full border border-gray-300 bg-white absolute left-[-15px] hover:scale-120 transform top-1/2 -translate-y-1/2 z-20 cursor-pointer">
+                <button className="hidden md:flex new-prev p-3 rounded-full border border-gray-300 bg-white absolute left-[-15px] hover:scale-120 transform top-1/2 -translate-y-1/2 z-20 cursor-pointer">
                     <FaArrowLeft />
                 </button>
                 <Swiper
@@ -81,15 +81,15 @@ const NewRestaurantListByLocation = () => {
                     slidesPerView="auto"
                     spaceBetween={16}
                     navigation={{
-                        prevEl: ".swiper-button-prev-custom",
-                        nextEl: ".swiper-button-next-custom",
+                        prevEl: ".new-prev",
+                        nextEl: ".new-next",
                     }}
                 >
 
                     <div className='flex justify-between items-center bg-amber-200 relative'>
                         {/* Desktop arrows */}
 
-                        {restaurants.slice(0, 6).map((restaurant, index) => (
+                        {restaurants?.slice(0, 6).map((restaurant, index) => (
                             <SwiperSlide
                                 key={index}
                                 onClick={() => { dispatch(setRestaurantId(restaurant._id)), handleNavigate(restaurant.restaurantName) }}
@@ -134,7 +134,7 @@ const NewRestaurantListByLocation = () => {
 
                     </div>
                 </Swiper>
-                <button className="hidden md:flex swiper-button-next-custom p-3 rounded-full border border-gray-300 bg-white hover:scale-120 absolute right-[-17px] transform top-1/2 -translate-y-1/2 z-20 cursor-pointer">
+                <button className="hidden md:flex new-next p-3 rounded-full border border-gray-300 bg-white hover:scale-120 absolute right-[-17px] transform top-1/2 -translate-y-1/2 z-20 cursor-pointer">
                     <FaArrowRight />
                 </button>
             </div>

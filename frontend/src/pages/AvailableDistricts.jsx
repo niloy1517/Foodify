@@ -31,7 +31,7 @@ const AvailableDistricts = () => {
             <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8'>
                 {
                     districts.map((district, index) => (
-                        <div className=''>
+                        <div key={index} className=''>
                             {district.isEnable === 'active' &&
                                 <div key={index}>
                                     <img className='w-full h-[280px] rounded-2xl' src={`http://localhost:5000/images/${district.image}`} alt="" />

@@ -7,7 +7,6 @@ import Profile from '../pages/Profile'
 import Restaurant from '../pages/Restaurant'
 import DistrictRestaurantList from '../pages/DistrictRestaurantList'
 import OrderList from '../pages/OrderList'
-import Payment from '../pages/Payment'
 import MainPage from '../pages/MainPage/MainPage'
 import Checkout from '../pages/checkout'
 import PaymentSuccessfull from '../pages/PaymentSuccessfull'
@@ -26,7 +25,6 @@ const route = createBrowserRouter([
             { path: '/restaurants/district', Component: DistrictRestaurantList },
             { path: '/checkout', Component: Checkout },
             { path: '/order', Component: OrderList },
-            { path: '/payment', Component: Payment },
             { path: '/restaurants', Component: MainPage },
             { path: `/payment-success/:id`, Component: PaymentSuccessfull },
             { path: '/payment-failed/:id', Component: PaymentFailed },

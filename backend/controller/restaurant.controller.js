@@ -28,7 +28,9 @@ const addRestaurant = async (req, res) => {
 
     try {
         const restaurant = new restaurantModel({
-            restaurantName, ownerName, email, phone, description, image, address, city, zipcode, deliveryRadius, cuisines, status, deliveryTime, deliveryFee, openingTime, closingTime, longitude, latitude, district,
+            restaurantName, ownerName, email, phone, description, image, address, city, zipcode,
+            deliveryRadius: Number(deliveryRadius),
+            cuisines, status, deliveryTime, deliveryFee, openingTime, closingTime, longitude, latitude, district,
             location: {
                 type: 'Point',
                 coordinates: [Number(longitude), Number(latitude)]
@@ -170,50 +172,50 @@ const districtWiseRestaurant = async (req, res) => {
 
 
 const filterRestaurantsByDistance = async (req, res) => {
-  try {
-    const { lat, lng } = req.query;
+    try {
+        const { lat, lng } = req.query;
+ 
+        const latNum = parseFloat(lat);
+        const lngNum = parseFloat(lng);
 
-    const latNum = parseFloat(lat);
-    const lngNum = parseFloat(lng);
+        if (isNaN(latNum) || isNaN(lngNum)) {
+            return res.status(400).json({ success: false, message: 'Invalid coordinates' });
+        }
 
-    if (isNaN(latNum) || isNaN(lngNum)) {
-      return res.status(400).json({success: false, message: 'Invalid coordinates'});
+        let results = await restaurantModel.aggregate([
+            {
+                $geoNear: {
+                    near: { type: "Point", coordinates: [lngNum, latNum] },
+                    distanceField: "distanceMeters",
+                    spherical: true,
+                }
+            },
+            { $addFields: { distanceKm: { $divide: ["$distanceMeters", 1000] } } },
+            { $match: { $expr: { $lte: ["$distanceMeters", { $multiply: ["$deliveryRadius", 1000] }] } } },
+            { $sort: { distanceMeters: 1 } }
+        ]);
+
+        // remove duplicates
+        const uniqueRestaurants = []
+        const seenIds = new Set()
+
+        for (let r of results) {
+            if (!seenIds.has(r._id.toString())) {
+                seenIds.add(r._id.toString())
+                uniqueRestaurants.push(r)
+            }
+        }
+
+
+        res.json({
+            success: true,
+            message: 'Restaurants filtered successfully',
+            data: uniqueRestaurants
+        });
+
+    } catch (error) {
+        res.json({ success: false, message: 'Something went wrong', error: error.message });
     }
-
-    let results = await restaurantModel.aggregate([
-      {
-        $geoNear: {
-          near: { type: "Point", coordinates: [lngNum, latNum] },
-          distanceField: "distanceMeters",
-          spherical: true,
-        }
-      },
-      { $addFields: { distanceKm: { $divide: ["$distanceMeters", 1000] } } },
-      { $match: { $expr: { $lte: ["$distanceMeters", "$deliveryRadius"] } } },
-      { $sort: { distanceMeters: 1 } }
-    ]);
-
-    // remove duplicates
-    const uniqueRestaurants = []
-    const seenIds = new Set()
-
-    results.filter(res => {
-        if(!seenIds.has(res)) {
-            seenIds.add(res);
-            uniqueRestaurants.push(res)
-        }
-    })
-   
-
-    res.status(200).json({
-      success: true,
-      message: 'Restaurants filtered successfully',
-      data: uniqueRestaurants
-    });
-
-  } catch (error) {
-    res.status(500).json({success: false, message: 'Something went wrong', error: error.message});
-  }
 };
 
 

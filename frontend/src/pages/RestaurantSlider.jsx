@@ -52,7 +52,7 @@ const RestaurantSlider = () => {
         <div className='px-4 md:px-10 py-15'>
             <h1 className='text-[28px] md:text-[35px] font-bold pb-15'>Popular restaurants in your area</h1>
 
-            <div className='flex items-center'>
+            <div className='w-full flex justify-center items-center'>
                 <button className="hidden md:flex swiper-button-prev-custom p-3 rounded-full border border-gray-300 bg-white hover:scale-120 absolute transform translate-y-1/2 left-5 z-20 cursor-pointer">
                     <FaArrowLeft />
                 </button>
@@ -64,10 +64,10 @@ const RestaurantSlider = () => {
                         prevEl: ".swiper-button-prev-custom",
                         nextEl: ".swiper-button-next-custom",
                     }}
+                    className='md:w-full flex justify-cente'
                 >
 
-                    <div className='flex justify-between items-center bg-amber-200 relative'>
-                        {/* Desktop arrows */}
+                    <div className=' relative'>
 
                         {restaurants.map((restaurant, index) => (
                             <SwiperSlide
@@ -95,8 +95,8 @@ const RestaurantSlider = () => {
                                             <TbCurrencyTaka />
                                         </div>
                                         <div className='flex items-center shrink-0 truncate '>
-                                            {JSON.parse(restaurant.cuisines).map(cuisine => (
-                                                <div className='flex items-center'>
+                                            {JSON.parse(restaurant.cuisines).map((cuisine, index) => (
+                                                <div key={index} className='flex items-center'>
                                                     <PiDotOutlineFill />
                                                     <p key={cuisine.index}>{cuisine}</p>
                                                 </div>

@@ -21,7 +21,7 @@ const MainPage = () => {
           setShowFilteredRestaurant={setShowFilteredRestaurant}
         />
       </div>
-      
+
 
       {/* Main content */}
       <div className='mx-auto flex flex-col gap-15 px-4 w-[98%] xl:w-[78%]'>
@@ -34,11 +34,12 @@ const MainPage = () => {
             :
             <div>
               <MenuCategory
+                key="menu-category-swiper"
                 setShowCateRestaurants={setShowCateRestaurants}
                 setShowFilteredRestaurant={setShowFilteredRestaurant}
 
               />
-              <NewRestaurantListByLocation />
+              <NewRestaurantListByLocation key="new-restaurant-swiper" />
               <AllRestaurantsListByLocation />
             </div>
         }

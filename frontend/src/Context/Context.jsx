@@ -9,17 +9,20 @@ export const storeContext = createContext(null)
 const Context = ({ children }) => {
   const [showAuthenticationPopup, setShowAuthenticationPopup] = useState(false)
   const [loginPopup, setLoginPopup] = useState(false)
+  const [isLoginPage, setIsLoginPage] = useState(true)
   const [userProfileData, setUserProfileData] = useState('')
+  const [userProfilePopup, setUserProfilePopup] = useState(false)
   const [profileDropdown, setProfileDropdown] = useState(false)
   const [coordinates, setCoordinates] = useState({ lat: 23.8103, lng: 90.4125 })
   const [address, setAddress] = useState('')
+  const [userCartModal, setUserCartModal] = useState(false)
 
   const [suggestAddress, setSuggestAddress] = useState([])
 
   const [findFoodByLocationPopup, setFindFoodByLocationPopup] = useState(false)
 
   const [searchRestaurants, setSearchRestaurants] = useState([])
-  
+
 
 
   const fetchLocationAddress = async (lat, lng) => {
@@ -98,26 +101,21 @@ const Context = ({ children }) => {
 
 
   const contextValue = {
-    showAuthenticationPopup,
-    setShowAuthenticationPopup,
+    showAuthenticationPopup, setShowAuthenticationPopup,
     SERVER_URL,
-    loginPopup,
-    setLoginPopup,
-    userProfileData,
-    setUserProfileData,
-    profileDropdown,
-    setProfileDropdown,
+    loginPopup, setLoginPopup,
+    isLoginPage, setIsLoginPage,
+    userProfileData, setUserProfileData,
+    profileDropdown, setProfileDropdown,
     locateLocation,
-    coordinates,
-    setCoordinates,
-    address,
-    setAddress,
+    coordinates, setCoordinates,
+    address, setAddress,
     fetchSuggestions,
     suggestAddress,
-    searchRestaurants,
-    setSearchRestaurants,
-    findFoodByLocationPopup,
-    setFindFoodByLocationPopup
+    searchRestaurants, setSearchRestaurants,
+    findFoodByLocationPopup, setFindFoodByLocationPopup,
+    userProfilePopup, setUserProfilePopup,
+    userCartModal, setUserCartModal
   }
   return (
     <storeContext.Provider value={contextValue}>

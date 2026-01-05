@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setUserData } from '../Service/Redux/Slice/UserDataSlice';
 import { logoutUser } from '../Service/Redux/Slice/AddToCartItemSlice';
 const Authentication = () => {
-    const { showAuthenticationPopup, setShowAuthenticationPopup, SERVER_URL, loginPopup, setLoginPopup, userProfileData, setUserProfileData, getUerProfileData } = useContext(storeContext)
+    const { showAuthenticationPopup, setShowAuthenticationPopup, SERVER_URL, loginPopup, setLoginPopup, isLoginPage, setIsLoginPage, userProfileData, setUserProfileData, getUerProfileData } = useContext(storeContext)
 
     const userData = useSelector((state) => state.user.userData);
 console.log('Navbar1', userData)    
@@ -18,7 +18,7 @@ console.log('Navbar', userId)
 
     const inputRefs = useRef([])
 
-    const [isLoginPage, setIsLoginPage] = useState(true)
+    
     const [showPassword, setShowPassword] = useState(false)
     const [resetPasswordPopup, setResetPasswordPopup] = useState(false)
     const [resetPasswordOtpPopup, setResetPasswordOtpPopup] = useState(false)

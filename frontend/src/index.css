@@ -8,22 +8,6 @@
 }
 
 
-.slide-bar {
-    animation: forwards;
-    animation-name: slide;
-    animation-duration: 1s;
-}
-
-
-@keyframes slide {
-    from {
-        width: 0%;
-    }
-
-    to {
-        width: 420px;
-    }
-}
 
 
 .markdown-input {

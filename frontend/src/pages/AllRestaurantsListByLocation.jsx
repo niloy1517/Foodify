@@ -51,7 +51,7 @@ const AllRestaurantsListByLocation = () => {
                     params: { lat, lng }
                 }
             )
-
+console.log(response)
             setRestaurants(response.data.data)
 
 

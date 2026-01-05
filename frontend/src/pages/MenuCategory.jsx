@@ -35,7 +35,7 @@ const MenuCategory = () => {
             <div className="relative w-full">
                 {/* Left Arrow */}
                 <button
-                    className='hidden md:flex absolute left-[-15px] top-1/2 -translate-y-1/2 z-30 p-3 rounded-full border border-gray-400 bg-white cursor-pointer swiper-button-prev-custom'
+                    className='hidden md:flex absolute left-[-15px] top-1/2 -translate-y-1/2 z-30 p-3 rounded-full border border-gray-400 bg-white cursor-pointer menu-prev'
                 >
                     <FaArrowLeft />
                 </button>
@@ -46,15 +46,18 @@ const MenuCategory = () => {
                     slidesPerView="auto"
                     spaceBetween={16}
                     navigation={{
-                        prevEl: ".swiper-button-prev-custom",
-                        nextEl: ".swiper-button-next-custom",
+                        prevEl: ".menu-prev",
+                        nextEl: ".menu-next",
                     }}
                     className="w-full"
                 >
                     {categories.map((cate, index) => (
                         <SwiperSlide
                             key={index}
-                            onClick={() => navigate(`/category/restaurant/${cate._id}`)}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                navigate(`/category/restaurant/${cate._id}`)
+                            }}
                             className="!w-[140px] !h-[180px] flex flex-col text-center shrink-0 cursor-pointer"
                         >
                             <img
@@ -69,7 +72,7 @@ const MenuCategory = () => {
 
                 {/* Right Arrow */}
                 <button
-                    className='hidden md:flex absolute right-[-17px] top-1/2 -translate-y-1/2 z-30 p-3 rounded-full border border-gray-300 bg-white cursor-pointer swiper-button-next-custom'
+                    className='hidden md:flex absolute right-[-17px] top-1/2 -translate-y-1/2 z-30 p-3 rounded-full border border-gray-300 bg-white cursor-pointer menu-next'
                 >
                     <FaArrowRight />
                 </button>
