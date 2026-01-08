@@ -35,7 +35,7 @@ const FindFoodByLocationPopup = () => {
     }
 
     return (
-        <div className='w-full flex justify-center px-4'>
+        <div className='w-full flex justify-center px-4 absolute z-20'>
             <div className='w-[300px] bg-amber-100 p-4 rounded flex gap-3'>
                 <div className='h-12 px-4 flex items-center justify-between border border-gray-200 '>
                     <input

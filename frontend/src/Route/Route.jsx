@@ -1,8 +1,7 @@
-import { createBrowserRouter, useLocation } from 'react-router-dom'
+import { createBrowserRouter } from 'react-router-dom'
 
 import MainLayout from '../MainLayout/MainLayout'
 import App from '../App'
-import EditProfile from '../Profile/EditProfile'
 import Profile from '../pages/Profile'
 import Restaurant from '../pages/Restaurant'
 import DistrictRestaurantList from '../pages/DistrictRestaurantList'
@@ -13,6 +12,7 @@ import PaymentSuccessfull from '../pages/PaymentSuccessfull'
 import PaymentFailed from '../pages/PaymentFailed'
 import RestaurantFindByCategory from '../pages/RestaurantFindByCategory'
 import viewMobileCartDetails from '../pages/viewMobileCartDetails'
+
 
 const route = createBrowserRouter([
     {
@@ -28,7 +28,7 @@ const route = createBrowserRouter([
             { path: '/restaurants', Component: MainPage },
             { path: `/payment-success/:id`, Component: PaymentSuccessfull },
             { path: '/payment-failed/:id', Component: PaymentFailed },
-            { path: '/category/restaurant/:id', Component: RestaurantFindByCategory },
+            { path: '/category/restaurant/:id', Component: RestaurantFindByCategory }
         ]
     },
 

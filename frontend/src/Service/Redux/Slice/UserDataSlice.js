@@ -7,7 +7,7 @@ const initialState = {
     apartment: '',
     riderNote: '',
     label: ''
-  }
+  },
 }
 
 export const userDataSlice = createSlice({
@@ -18,8 +18,8 @@ export const userDataSlice = createSlice({
       state.userData = action.payload;
     },
     setNewDeliveryAddress: (state, action) => {
-      state.newDeliveryAddress = action.payload
-    }
+      state.newDeliveryAddress = action.payload;
+    },
   }
 })
 

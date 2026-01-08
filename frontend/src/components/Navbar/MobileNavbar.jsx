@@ -8,16 +8,11 @@ import { storeContext } from '../../Context/Context';
 const MobileNavbar = () => {
     const { setShowAuthenticationPopup, setLoginPopup, setFindFoodByLocationPopup, setUserProfilePopup, setUserCartModal } = useContext(storeContext)
 
-    const carts = useSelector((state) => state.cart.carts);
-    const restaurantId = useSelector((state) => state.restaurant.restaurantId);
-    const restaurantData = useSelector((state) => state.restaurant.restaurantData);
     const userData = useSelector((state) => state.user.userData);
     const allRestaurantData = useSelector((state) => state.cart.allRestaurantData);
-    const userId = userData?._id || "guest";
-    const userCart = carts?.[userId] || {};
-    const restaurantCart = userCart?.[restaurantId] || {};
-    const items = restaurantCart?.items || [];
-    console.log(restaurantData)
+    
+
+    
     return (
         <div>
             <div className='py-2 shadow'>

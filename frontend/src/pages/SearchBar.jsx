@@ -9,7 +9,7 @@ import { useContext } from 'react';
 import { storeContext } from '../Context/Context';
 
 const SearchBar = ({ setShowFilteredRestaurant }) => {
-    const { searchRestaurants, setSearchRestaurants } = useContext(storeContext)
+    const { searchRestaurants, setSearchRestaurants, setIsMobileFilterbarModal } = useContext(storeContext)
 
     const [suggestKeywordPopup, setSuggestKeywordPopup] = useState(false);
     const [suggestKeywordBySearchPopup, setSuggestKeywordBySearchPopup] = useState(false);
@@ -127,7 +127,7 @@ const SearchBar = ({ setShowFilteredRestaurant }) => {
                         onChange={handleOnchange}
                         value={queryKeyword}
                     />
-                <div className='h-16 flex xl:hidden items-center gap-2 font-semibold text-gray-600 border border-gray-200 px-3 rounded-3xl cursor-pointer'>
+                <div onClick={() => setIsMobileFilterbarModal(true)} className='h-16 flex xl:hidden items-center gap-2 font-semibold text-gray-600 border border-gray-200 px-3 rounded-3xl cursor-pointer'>
                     <HiAdjustmentsHorizontal className='text-[20px] md:text-2xl' />
                     <span>Filter</span>
                 </div>

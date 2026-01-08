@@ -6,9 +6,9 @@ import Navbar from '../components/Navbar/Navbar'
 
 const MainLayout = () => {
   const location = useLocation()
-  console.log(location)
+
   const isCheckout = location.pathname === '/checkout'
-  console.log(isCheckout)
+
   return (
     <div>
       <Navbar />

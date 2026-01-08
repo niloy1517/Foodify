@@ -14,15 +14,27 @@ const Context = ({ children }) => {
   const [userProfilePopup, setUserProfilePopup] = useState(false)
   const [profileDropdown, setProfileDropdown] = useState(false)
   const [coordinates, setCoordinates] = useState({ lat: 23.8103, lng: 90.4125 })
+
   const [address, setAddress] = useState('')
   const [userCartModal, setUserCartModal] = useState(false)
-
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
   const [suggestAddress, setSuggestAddress] = useState([])
 
   const [findFoodByLocationPopup, setFindFoodByLocationPopup] = useState(false)
 
   const [searchRestaurants, setSearchRestaurants] = useState([])
 
+  //Auto suggest search key address
+  const [addressData, setAddressData] = useState('')
+
+  const [isMobileFilterbarModal, setIsMobileFilterbarModal] = useState(false)
+
+  //Fitered restaurants shows
+  const [showFilteredRestaurant, setShowFilteredRestaurant] = useState(false)
+
+  //Restaurants
+  const [restaurants, setRestaurants] = useState([]);
 
 
   const fetchLocationAddress = async (lat, lng) => {
@@ -67,6 +79,7 @@ const Context = ({ children }) => {
       setCoordinates({ lat: latitude, lng: longitude })
       fetchLocationAddress(latitude, longitude)
       setLoading(false)
+     
     }, (error) => {
       setError(error.message)
       setLoading(false)
@@ -112,10 +125,12 @@ const Context = ({ children }) => {
     address, setAddress,
     fetchSuggestions,
     suggestAddress,
-    searchRestaurants, setSearchRestaurants,
     findFoodByLocationPopup, setFindFoodByLocationPopup,
     userProfilePopup, setUserProfilePopup,
-    userCartModal, setUserCartModal
+    userCartModal, setUserCartModal,
+    addressData, setAddressData,
+    isMobileFilterbarModal, setIsMobileFilterbarModal,
+    restaurants, setRestaurants,
   }
   return (
     <storeContext.Provider value={contextValue}>

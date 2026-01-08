@@ -1,7 +1,7 @@
 import { restaurantModel } from "../models/restaurant.model.js";
 import fs from 'fs'
 import path from 'path'
-import { userModel } from "../models/userAuth.model.js";
+
 
 
 const addRestaurant = async (req, res) => {
@@ -174,7 +174,7 @@ const districtWiseRestaurant = async (req, res) => {
 const filterRestaurantsByDistance = async (req, res) => {
     try {
         const { lat, lng } = req.query;
- 
+console.log('iam from filter', lat, lng)
         const latNum = parseFloat(lat);
         const lngNum = parseFloat(lng);
 
@@ -212,7 +212,7 @@ const filterRestaurantsByDistance = async (req, res) => {
             message: 'Restaurants filtered successfully',
             data: uniqueRestaurants
         });
-
+console.log(uniqueRestaurants.length)
     } catch (error) {
         res.json({ success: false, message: 'Something went wrong', error: error.message });
     }

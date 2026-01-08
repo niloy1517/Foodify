@@ -11,6 +11,7 @@ restaurantRoute.get('/list', getRestaurants)
 restaurantRoute.get('/details/:id', getRestaurant)
 restaurantRoute.get('/district/:id', districtWiseRestaurant)
 restaurantRoute.get('/all/restaurants', filterRestaurantsByDistance)
+//restaurantRoute.get('/restaurants', filterRestaurantsByDistance)
 
 
 export {restaurantRoute}

@@ -1,27 +1,39 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { assets } from '../assets/assets'
 import { LuLocateFixed } from "react-icons/lu";
-
-import { LocationSearch } from '../Hooks/LocationSearch';
 import { CiSearch } from "react-icons/ci";
 import DotLoading from '../Loading/DotLoading/DotLoading';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { storeContext } from '../Context/Context';
+import { useLocationRestaurants } from '../Hooks/useLocationRestaurants';
 
 const Hero = () => {
-  const { search, searchKey, setSearchKey, results, setResults, locateLocation } = LocationSearch()
-
+  const {
+    searchKey,
+    setSearchKey,
+    searchAddresses,
+    setSearchAddresses,
+    searchLocation,
+    setFullAddressData,
+    saveAddressInLocalStorage,
+    locateLocation
+  } = useLocationRestaurants()
+  const { addressData, setAddressData } = useContext(storeContext)
   const [loading, setLoading] = useState(false)
 
+
   const navigate = useNavigate()
+
 
   const handleLoading = () => {
     setLoading(true)
     setTimeout(() => {
       setLoading(false)
-      navigate('/restaurants')
+      navigate(`/restaurants`)
     }, 2000)
-    
   }
+
   return (
     <div className='w-full h-auto relative'>
       <img
@@ -41,7 +53,7 @@ const Hero = () => {
             <input
               type="text"
               value={searchKey}
-              onChange={(e) => search(e.target.value)}
+              onChange={(e) => searchLocation(e.target.value)}
               placeholder='Enter your address'
               className='border-0 outline-0 flex-1 text-gray-700 placeholder-gray-500'
             />
@@ -55,7 +67,10 @@ const Hero = () => {
           </div>
 
           <button
-            onClick={handleLoading}
+            onClick={() => {
+              handleLoading();
+              saveAddressInLocalStorage()
+            }}
             className='flex justify-center bg-orange-600 hover:bg-orange-700 text-center text-white px-6 py-3 rounded-lg cursor-pointer font-medium transition-all duration-200 hover:shadow-lg min-w-[120px]'
           >
             {!loading ? 'Find Food' : <DotLoading />}
@@ -65,13 +80,13 @@ const Hero = () => {
 
       <div className='w-full absolute flex justify-center md:mt-[-50px] z-30 px-4'>
         {
-          results.length > 0 &&
+          searchAddresses.length > 0 &&
           <ul className='max-w-[600px] flex flex-col gap-2 bg-white p-4 shadow-2xl'>
             {
-              results.map((result, index) => (
-                <li onClick={() => { setSearchKey(result.display_name); setResults('') }} key={index} className='w-full flex items-center gap-8 py-1 text-gray-700 hover:bg-gray-100 cursor-pointer px-3'>
+              searchAddresses.map((address, index) => (
+                <li onClick={() => { setSearchKey(address.display_name); setFullAddressData(address); setSearchAddresses('') }} key={index} className='w-full flex items-center gap-8 py-1 text-gray-700 hover:bg-gray-100 cursor-pointer px-3'>
                   <CiSearch className='text-2xl font-bold shrink-0' />
-                  <span>{result.display_name}</span>
+                  <span>{address.display_name}</span>
                 </li>
               ))
             }

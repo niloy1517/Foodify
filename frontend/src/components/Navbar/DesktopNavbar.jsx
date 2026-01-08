@@ -5,14 +5,18 @@ import { GrLocation } from "react-icons/gr";
 import { SlArrowDown } from "react-icons/sl";
 import { useSelector } from 'react-redux';
 import { storeContext } from '../../Context/Context';
+import FindFoodByLocationPopup from '../../AllPopupPages/FindFoodByLocationPopup';
 
 const DesktopNavbar = () => {
     const { setShowAuthenticationPopup, setLoginPopup, setIsLoginPage, setFindFoodByLocationPopup, setUserProfilePopup, setUserCartModal } = useContext(storeContext)
 
-
-
     const userData = useSelector((state) => state.user.userData)
     const allRestaurantData = useSelector((state) => state.cart.allRestaurantData);
+    
+    //Get location from localStorage
+    let defaultLocation = JSON.parse(localStorage.getItem('defaultLocation'))
+    
+    
     return (
         <div className='w-full'>
             <div className='flex items-center justify-between px-10 py-8 shadow'>
@@ -24,7 +28,7 @@ const DesktopNavbar = () => {
                     onClick={() => setFindFoodByLocationPopup(true)}
                     className='flex items-center gap-2 justify-center text-[17px] font-medium text-gray-600 px-3 py-1 rounded cursor-pointer hover:bg-gray-50'>
                     <GrLocation className='text-2xl font-medium' />
-                    <p className='truncate max-w-[200px]'>Road 71, Habiganj sadar, Habiganj</p>
+                    <p className='truncate max-w-[200px]'>{defaultLocation?.display_name}</p>
                 </div>
                 <div className='flex items-center gap-10'>
                     {

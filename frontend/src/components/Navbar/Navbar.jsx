@@ -11,7 +11,7 @@ import UserCartModal from '../../AllPopupPages/UserCartModal'
 const Navbar = () => {
 
     const { showAuthenticationPopup, userProfilePopup, userCartModal } = useContext(storeContext)
-console.log('setUserCartModal', userCartModal)
+
     return (
         <div className='sticky top-0 left-0 bg-white z-20'>
             {/* Mobile or Desktop Navbar */}

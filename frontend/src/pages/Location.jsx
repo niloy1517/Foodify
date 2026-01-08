@@ -12,12 +12,13 @@ import { setNewDeliveryAddress } from '../Service/Redux/Slice/UserDataSlice';
 const Location = ({setOpenMap}) => {
     axios.defaults.withCredentials = true;
     const { locateLocation, coordinates, setCoordinates, address, setAddress } = useContext(storeContext)
+
     const { addressPart, short } = address;
     const { lat, lng } = coordinates;
-   
+
     const [addNewAddress, setAddNewAddress] = useState({})
     const [errorMessage, setErrorMessage] = useState(false)
-    
+    console.log(coordinates)   
     const dispatch = useDispatch()
     
 
@@ -106,7 +107,7 @@ const Location = ({setOpenMap}) => {
                     <button onClick={() => {
                         locateLocation(),
                             setAddNewAddress({
-                                street: addressPart.street || addressPart.road || '',
+                                street: addressPart?.street || addressPart?.road || '',
                                 area: addressPart.neighbourhood || addressPart.suburb || addressPart.subLocality || "",
                                 city: addressPart.city || addressPart.town || addressPart.village || '',
                                 district: addressPart.state_district || '',
@@ -115,9 +116,10 @@ const Location = ({setOpenMap}) => {
                                 subLocation: short,
                                 location: {
                                     type: "Point",
-                                    coordinates: [lng, lat]
+                                    coordinates: [0, 1]
                                 }
                             })
+                            
                     }} className='w-[35%] flex items-center gap-2 hover:text-orange-600 cursor-pointer'><LuLocateFixed /> Locate Me</button>
                 </div>
 
