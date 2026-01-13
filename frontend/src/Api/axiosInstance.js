@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-    baseURL: 'http://localhost:5000/api',
+    baseURL: "https://mental-gwen-myportfolioproject-727b9a2c.koyeb.app",
     withCredentials: true,
     headers: {'Content-Type': 'Application/json'}
 })
