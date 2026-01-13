@@ -7,11 +7,11 @@ import Restaurant from '../pages/Restaurant'
 import DistrictRestaurantList from '../pages/DistrictRestaurantList'
 import OrderList from '../pages/OrderList'
 import MainPage from '../pages/MainPage/MainPage'
-import Checkout from '../pages/checkout'
 import PaymentSuccessfull from '../pages/PaymentSuccessfull'
 import PaymentFailed from '../pages/PaymentFailed'
 import viewMobileCartDetails from '../pages/viewMobileCartDetails'
 import FilteredRestaurantsPage from '../pages/FilteredRestaurantsPage'
+import Checkout from '../pages/Checkout'
 
 
 const route = createBrowserRouter([
