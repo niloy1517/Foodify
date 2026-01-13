@@ -12,7 +12,6 @@ const Context = ({ children }) => {
   const [loginPopup, setLoginPopup] = useState(false)
   const [isLoginPage, setIsLoginPage] = useState(true)
   const [userProfileData, setUserProfileData] = useState('')
-  const [userProfilePopup, setUserProfilePopup] = useState(false)
   const [profileDropdown, setProfileDropdown] = useState(false)
   const [coordinates, setCoordinates] = useState({ lat: 23.8103, lng: 90.4125 })
 
@@ -43,6 +42,8 @@ const Context = ({ children }) => {
   //Global overlay state
   const [isOverlay, setIsOverlay] = useState(false)
 
+  //DropdownManu state connected with global overlay state
+    const [isDropdownMenu, setIsDropdownMenu] = useState(false);
 
   //Restaurants filter state
   const [filters, setFilters] = useState(() => {
@@ -232,13 +233,13 @@ const Context = ({ children }) => {
     fetchSuggestions,
     suggestAddress,
     findFoodByLocationPopup, setFindFoodByLocationPopup,
-    userProfilePopup, setUserProfilePopup,
     userCartModal, setUserCartModal,
     addressData, setAddressData,
     isMobileFilterbarModal, setIsMobileFilterbarModal,
     restaurants, setRestaurants,
     categoryId, setCategoryId,
     isOverlay, setIsOverlay,
+    isDropdownMenu, setIsDropdownMenu,
     filters, setFilters,
     updateFilter,
     clearFilter,

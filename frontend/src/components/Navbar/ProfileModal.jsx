@@ -13,23 +13,23 @@ import { toast } from 'react-toastify';
 import { storeContext } from '../../Context/Context';
 import { logoutUser } from '../../Service/Redux/Slice/AddToCartItemSlice';
 import { setUserData } from '../../Service/Redux/Slice/UserDataSlice';
+import { axiosInstance } from '../../Api/axiosInstance';
 
 const ProfileModal = () => {
-    const { setUserProfilePopup } = useContext(storeContext)
+    const { setIsDropdownMenu } = useContext(storeContext)
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
     //USER LOGOUT FUNCTION
     const handleLogout = async () => {
-        console.log('click')
         try {
-            const response = await axios.post(`http://localhost:5000/api/user/logout`, {}, { withCredentials: true })
+            const response = await axiosInstance.post(`/user/logout`, {})
             if (response.data.success) {
                 toast.success(response.data.message)
                 dispatch(setUserData(''))
                 navigate('/')
-                setUserProfilePopup(false)
+                setIsDropdownMenu(false)
                 dispatch(logoutUser())
             } else {
                 toast.error(response.data.message)
@@ -40,11 +40,11 @@ const ProfileModal = () => {
         }
     }
     return (
-        <div className='w-full h-screen flex flex-col text-gray-700'>
-            <div onClick={() => setUserProfilePopup(false)} className='absolute top-4 right-4 w-10 h-10 flex justify-center items-center cursor-pointer rounded-full hover:bg-gray-100'>
+        <div className='w-full h-screen flex flex-col text-gray-700 '>
+            <div onClick={() => setIsDropdownMenu(false)} className='absolute top-4 right-4 w-10 h-10 flex justify-center items-center cursor-pointer rounded-full hover:bg-gray-100'>
                 <IoCloseOutline className='text-3xl ' />
             </div>
-            <div className='px-4 mt-15 text-[18px] '>
+            <div className='px-4 text-[18px] mt-20'>
                 <div className='pb-2'>
                     <button className='w-full flex items-center gap-2 p-3 cursor-pointer hover:bg-orange-100 rounded font-semibold'><TiHomeOutline className='text-2xl' /> <span>Home</span></button>
                     <button className='w-full flex items-center gap-2 p-3 cursor-pointer hover:bg-orange-100 rounded font-semibold'><RiAccountPinBoxLine className='text-2xl' /> <span>Profile</span></button>

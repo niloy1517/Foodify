@@ -10,13 +10,22 @@ import UserCartModal from '../../AllPopupPages/UserCartModal'
 
 const Navbar = () => {
 
-    const { showAuthenticationPopup, userProfilePopup, userCartModal } = useContext(storeContext)
+    const { showAuthenticationPopup, isDropdownMenu, userCartModal } = useContext(storeContext)
 
     return (
         <div className='sticky top-0 left-0 bg-white z-20'>
             {/* Mobile or Desktop Navbar */}
-            <div className="lg:hidden">
-                <MobileNavbar />
+            <div>
+                {
+                    !isDropdownMenu ?
+                        <div className="lg:hidden">
+                            <MobileNavbar />
+                        </div>
+                        :
+                        <div className="lg:hidden ">
+                            <ProfileModal />
+                        </div>
+                }
             </div>
             <div className="hidden lg:flex">
                 <DesktopNavbar />
@@ -26,20 +35,14 @@ const Navbar = () => {
             {showAuthenticationPopup && <Authentication />}
 
             {/* Profile modal */}
-            {userProfilePopup &&
-                <div>
-                    <div className="lg:hidden ">
-                        <ProfileModal />
-                    </div>
-
-                    <div className="hidden lg:flex">
-                        <ProfileDropdown />
-                    </div>
+            {isDropdownMenu &&
+                <div className="hidden lg:flex">
+                    <ProfileDropdown />
                 </div>
             }
 
             {/* User cart modal */}
-            { userCartModal && <UserCartModal />}
+            {userCartModal && <UserCartModal />}
         </div>
     )
 }

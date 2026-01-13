@@ -6,13 +6,14 @@ import { useSelector } from 'react-redux';
 import { storeContext } from '../../Context/Context';
 
 const MobileNavbar = () => {
-    const { setShowAuthenticationPopup, setLoginPopup, setFindFoodByLocationPopup, setUserProfilePopup, setUserCartModal } = useContext(storeContext)
+    const { setShowAuthenticationPopup, setLoginPopup, setFindFoodByLocationPopup, setIsDropdownMenu, setUserCartModal } = useContext(storeContext)
 
     const userData = useSelector((state) => state.user.userData);
     const allRestaurantData = useSelector((state) => state.cart.allRestaurantData);
-    
 
-    
+    //Get location from localStorage
+    let defaultLocation = JSON.parse(localStorage.getItem('defaultLocation'))
+
     return (
         <div className='z-50'>
             <div className='py-2 shadow'>
@@ -25,7 +26,7 @@ const MobileNavbar = () => {
                             />
                             :
                             <FaRegUser
-                                onClick={() => { setUserProfilePopup(true) }}
+                                onClick={() => { setIsDropdownMenu(true) }}
                                 className='text-2xl cursor-pointer'
                             />
                     }
@@ -45,12 +46,15 @@ const MobileNavbar = () => {
 
                 </div>
 
-                <div
-                    onClick={() => setFindFoodByLocationPopup(true)}
-                    className='flex items-center gap-2 justify-center pt-4 text-[15px] cursor-pointer font-medium text-gray-600'>
-                    <GrLocation className='text-2xl font-medium' />
-                    <p>Road 71, Habiganj sadar, Habiganj</p>
-                </div>
+                {
+                    defaultLocation &&
+                    <div
+                        onClick={() => setFindFoodByLocationPopup(true)}
+                        className='flex items-center gap-2 justify-center pt-4 text-[15px] cursor-pointer font-medium text-gray-600'>
+                        <GrLocation className='text-2xl font-medium' />
+                        <p className='max-w-[50%] truncate'>{defaultLocation.display_name}</p>
+                    </div>
+                }
             </div>
         </div >
     )

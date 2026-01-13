@@ -3,7 +3,7 @@ import { SiIfood } from "react-icons/si";
 
 const Footer = () => {
   return (
-    <footer className=" px-10 py-14 mt-20">
+    <footer className="relative px-10 py-14 mt-20 -z-10">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
 
         {/* Logo + About */}

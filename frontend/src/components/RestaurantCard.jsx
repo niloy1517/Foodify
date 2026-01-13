@@ -23,18 +23,18 @@ const RestaurantCard = ({ restaurant, from }) => {
         <div
             onClick={() => { dispatch(setRestaurantId(restaurant._id)), handleNavigate(restaurant.restaurantName) }}
             className={
-                `${from === 'swiperJsx' && 'w-[290px] xl:w-[280px] h-[240px] xl:h-[250px]'}
+                `${from === 'swiperJsx' && 'w-[290px] xl:w-[280px] h-[240px] xl:h-[250px]'} ${from === 'filteredRestaurantsPageJsx' && 'xl:h-[270px]' }
                  w-full h-[22rem] xl:h-[17rem] shrink-0 border border-gray-300 rounded-[10px] overflow-hidden cursor-pointer
                  `}
         >
-            <img className={`${from === 'swiperJsx' && 'w-full h-[150px]'} w-full h-[72%] xl:h-[65%] hover:scale-105 transition transform duration-200`} src={`http://localhost:5000/images/${restaurant.image}`} alt={restaurant.name} />
+            <img className={`${from === 'swiperJsx' && 'w-full h-[150px]'} ${from === 'filteredRestaurantsPageJsx' && 'xl:h-[170px]' } w-full h-[72%] xl:h-[65%] hover:scale-105 transition transform duration-200`} src={`http://localhost:5000/images/${restaurant.image}`} alt={restaurant.name} />
             <div className='p-2 text-sm'>
                 <div className='flex justify-between font-semibold'>
                     <p className='text-[22px] font-semibold'>{restaurant.restaurantName}</p>
                     <div className='flex items-center text-sm text-gray-700'>
                         <FaStar className='text-amber-500 text-[16px]' />
                         <p className='pl-2 pr-1'>{restaurant.rating}</p>
-                        <p className=''>(3500+)</p>
+                        <p className=''>(300+)</p>
                     </div>
                 </div>
                 <div className='w-full flex items-center space-x-2 text-sm text-gray-700 truncate'>

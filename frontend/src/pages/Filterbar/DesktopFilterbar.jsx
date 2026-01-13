@@ -7,7 +7,7 @@ import { useLocationRestaurants } from '../../Hooks/useLocationRestaurants';
 import { restaurantService } from '../../Services/restaurant.service';
 
 const DesktopFilterbar = ({ setShowFilteredRestaurants }) => {
-    const { setRestaurants, filters, setFilters, updateFilter, getFilteredRestaurants, clearFilter } = useContext(storeContext)
+    const {  filters, updateFilter, getFilteredRestaurants, clearFilter } = useContext(storeContext)
 
 
 
@@ -23,38 +23,6 @@ const DesktopFilterbar = ({ setShowFilteredRestaurants }) => {
         "dhaka briyani", "dhaka puchka house", "breackfast", "rute", "salad", "nasta"
     ];
 
-
-
-    const userLocation = localStorage.getItem('defaultLocation')
-
-
-
-    // const getRestaurants = async () => {
-
-    //     const userLat = userLocation?.lat;
-    //     const userLng = userLocation?.lon;
-
-    //     let query = new URLSearchParams();
-
-    //     if (filters.sortBy) query.append('sortBy', filters.sortBy);
-    //     if (filters.cuisine) query.append('cuisine', filters.cuisine);
-    //     if (filters.rating) query.append('rating', filters.rating);
-    //     if (filters.priceOrder) query.append('priceOrder', filters.priceOrder);
-    //     if (userLat) query.append('lat', userLat);
-    //     if (userLng) query.append('lng', userLng);
-
-    //     try {
-    //         const response = await axios.get(
-    //             `http://localhost:5000/api/restaurant/search?${query.toString()}`
-    //         );
-
-    //         if (response.data.message) {
-    //             setRestaurants(response.data.data)
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // };
 
     useEffect(() => {
         getFilteredRestaurants()

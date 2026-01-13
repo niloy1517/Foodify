@@ -13,7 +13,7 @@ import DesktopFilterbar from '../Filterbar/DesktopFilterbar'
 
 
 const MainPage = () => {
-  const { findFoodByLocationPopup, setFindFoodByLocationPopup, isOverlay } = useContext(storeContext)
+  const { findFoodByLocationPopup, setFindFoodByLocationPopup, isOverlay, isDropdownMenu, filters } = useContext(storeContext)
 
   const [showFilteredRestaurants, setShowFilteredRestaurants] = useState(false)
   // const [showFilteredRestaurant, setShowFilteredRestaurant] = useState(false)
@@ -31,7 +31,8 @@ const MainPage = () => {
 
   const [isFiltered, setIsFiltered] = useState(false);
 
-  const [hideFilterbar, setHideFilterbar] = useState(true);
+  const filterCounter = Object.values(filters).filter(f => f !== '').length;
+
 
 
   return (
@@ -40,21 +41,25 @@ const MainPage = () => {
         {/* Sidebar */}
         <div className={`hidden xl:flex sticky self-start h-fit top-24  ${isOverlay && '-z-10'} `}>
           <DesktopFilterbar
+            setIsFiltered={setIsFiltered}
             setShowFilteredRestaurants={setShowFilteredRestaurants}
           />
         </div>
         {/* Main content */}
-        <div className='w-full grid grid-cols-1 px-8 xl:px-16 '>
-          <SearchBar
-            isFiltered={isFiltered}
-          />
+        {
+          filterCounter === 0 &&
+          <div className={`w-full grid grid-cols-1 px-4 md:px-8 xl:px-16 ${isDropdownMenu && '-z-10'} `}>
+            <SearchBar
+              isFiltered={isFiltered}
+            />
 
-          <div className={`mt-14 relative ${isOverlay && '-z-30'}`}>
-            <MenuCategory />
-            <NewRestaurantsPage />
-            <AllRestaurantsPage />
+            <div className={`mt-14 relative ${isOverlay && '-z-30'}`}>
+              <MenuCategory />
+              <NewRestaurantsPage />
+              <AllRestaurantsPage />
+            </div>
           </div>
-        </div>
+        }
       </div>
 
 

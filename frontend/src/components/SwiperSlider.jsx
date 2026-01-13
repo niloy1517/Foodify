@@ -27,7 +27,7 @@ const SwiperSlider = ({ restaurants }) => {
 
         <div className='flex justify-between items-center bg-amber-200 relative'>
           {
-            restaurants?.slice(0, 6).map(restaurant => (
+            restaurants?.map(restaurant => (
               <SwiperSlide
                 key={restaurant._id}
                 className='min-w-56 max-w-72 max-h-70  shrink-0 rounded-[10px] overflow-hidden cursor-pointer'

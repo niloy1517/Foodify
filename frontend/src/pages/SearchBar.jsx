@@ -23,7 +23,10 @@ const SearchBar = ({ isFiltered }) => {
     const [suggestKeywordBySearchPopup, setSuggestKeywordBySearchPopup] = useState(false);
     const [recentSearchKeyword, setRecentSearchKeyword] = useState([]);
     const [recentKeywordPopup, setRecentKeywordPopup] = useState(false);
-    const [queryKeyword, setQueryKeyword] = useState('');
+    const [queryKeyword, setQueryKeyword] = useState(() => {
+        const saved = localStorage.getItem('queryKeyword');
+        return saved ? saved : ''
+    });
 
     const [searchKeywords, setSearchKeywords] = useState([])
 
@@ -40,8 +43,11 @@ const SearchBar = ({ isFiltered }) => {
 
 
 
-    // store user location from localStorage
+    // Store user location from localStorage
     const userLocation = JSON.parse(localStorage.getItem('defaultLocation'))
+
+    // Store query keyword in localStorage
+    localStorage.setItem('queryKeyword', queryKeyword);
 
 
 
@@ -167,47 +173,51 @@ const SearchBar = ({ isFiltered }) => {
         <div className={`w-full relative`}>
             <div onClick={(e) => e.stopPropagation()} className=''>
                 <div className='w-full flex items-center pt-6 gap-4 text-gray-700'>
-                    <div className='w-full h-16 md:h-18 flex items-center lg:text-[18px] px-4 rounded-3xl bg-gray-100'>
-                        <RiSearchLine className='text-2xl' />
-                        <input
-                            ref={inputRef}
-                            type="text"
-                            placeholder='Search for restaurant, cuisines and dishes'
-                            onClick={() => {
-                                setSuggestKeywordPopup(true);
-                                setRecentKeywordPopup(true);
-                                setIsOverlay(true)
-                            }}
-                            onChange={handleOnchange}
-                            value={queryKeyword}
-                            className='w-full h-full outline-none px-2 '
-                        />
-                        <div>
-                            {
-                                queryKeyword.length > 0 &&
-                                <RxCross2 onClick={() => { deleteFilterdRestaurants(); setIsOverlay(false); setQueryKeyword('') }} className='cursor-pointer' />
-                            }
+                    {
+                        filterCounter === 0 &&
+                        <div className='w-full h-16 md:h-18 flex items-center lg:text-[18px] px-2 rounded-3xl bg-gray-100'>
+                            <RiSearchLine className='text-2xl' />
+                            <input
+                                ref={inputRef}
+                                type="text"
+                                placeholder='Search for restaurant, cuisines and dishes'
+                                onClick={() => {
+                                    setSuggestKeywordPopup(true);
+                                    setRecentKeywordPopup(true);
+                                    setIsOverlay(true)
+                                }}
+                                onChange={handleOnchange}
+                                value={queryKeyword}
+                                className='w-full h-full outline-none px-2 '
+                            />
+                            <div>
+                                {
+                                    queryKeyword.length > 0 &&
+                                    <RxCross2 onClick={() => { deleteFilterdRestaurants(); setIsOverlay(false); setQueryKeyword(''); navigate('/restaurants') }} className='cursor-pointer' />
+                                }
+                            </div>
                         </div>
-                    </div>
+                    }
                     {
                         !isOverlay && queryKeyword.length === 0 &&
-                        <div>
+                        <div className={`${filterCounter > 0 && 'w-full'}`}>
                             {
                                 filterCounter > 0 ?
-                                    <div onClick={clearFilter} className='h-16 bg-white flex xl:hidden items-center gap-2 font-semibold text-gray-600 border border-gray-200 px-3 rounded-3xl cursor-pointer'>
-                                        <div className='flex items-center relative'>
+                                    <div className='w-full hover:bg-orange-100 transform transition-transform duration-500 select-none h-16 bg-white flex xl:hidden items-center justify-between gap-2 font-semibold text-gray-600 border border-gray-200 px-3 rounded-3xl cursor-pointer'>
+                                        <div onClick={() => setIsMobileFilterbarModal(true)} className='flex items-center relative'>
                                             <HiAdjustmentsHorizontal className='relative text-[24px] md:text-2xl' />
                                             <span className='absolute left-3 top-2 text-sm bg-orange-600 size-4.5 text-white flex items-center justify-center rounded-full'>{filterCounter}</span>
+                                            <span className='pl-1'>Filters: {filters.sortBy === 'topRated' && 'Top Rated,' || filters.sortBy === 'delivery' && 'Faster delivery,'} {filters.rating && 'Rating 4+'}</span>
                                         </div>
-                                        <span>Clear</span>
+                                        <div className='size-8 rounded-full hover:bg-white flex items-center justify-center'>
+                                            <RxCross2 onClick={() => { clearFilter(), navigate('/restaurants') }} className='text-2xl cursor-pointer' />
+                                        </div>
                                     </div>
                                     :
-                                    <div onClick={() => setIsMobileFilterbarModal(true)} className='h-16 bg-white flex xl:hidden items-center gap-2 font-semibold text-gray-600 border border-gray-200 px-3 rounded-3xl cursor-pointer'>
+                                    <div onClick={() => setIsMobileFilterbarModal(true)} className='select-none h-16 bg-white flex xl:hidden items-center gap-2 font-semibold text-gray-600 border border-gray-200 px-3 rounded-3xl cursor-pointer'>
                                         <HiAdjustmentsHorizontal className='text-[20px] md:text-2xl' />
                                         <span>Filter</span>
                                     </div>
-
-
                             }
                         </div>
                     }
@@ -298,8 +308,6 @@ const SearchBar = ({ isFiltered }) => {
                     </div>
                 </div>
             </div>
-
-
         </div>
     );
 };

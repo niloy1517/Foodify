@@ -6,7 +6,7 @@ import { storeContext } from '../Context/Context'
 
 
 const MainLayout = () => {
-  const { isOverlay, setIsOverlay } = useContext(storeContext)
+  const { isOverlay, setIsOverlay, setIsDropdownMenu } = useContext(storeContext)
   const location = useLocation()
 
   const isCheckout = location.pathname === '/checkout'
@@ -14,7 +14,10 @@ const MainLayout = () => {
   return (
     <div className='relative'>
       <Navbar />
-      <div onClick={() => setIsOverlay(false)} className={`max-w-[1400px] mx-auto ${isOverlay ? 'w-full bg-black/80 z-100 ' : ''}`}>
+      <div onClick={() => {
+        setIsOverlay(false);
+        setIsDropdownMenu(false)
+      }} className={`${isOverlay ? 'w-full bg-black/80 z-100 ' : ''}`}>
 
         <Outlet />
         {

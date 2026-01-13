@@ -8,15 +8,15 @@ import { storeContext } from '../../Context/Context';
 import FindFoodByLocationPopup from '../../AllPopupPages/FindFoodByLocationPopup';
 
 const DesktopNavbar = () => {
-    const { setShowAuthenticationPopup, setLoginPopup, setIsLoginPage, setFindFoodByLocationPopup, setUserProfilePopup, setUserCartModal } = useContext(storeContext)
+    const { setShowAuthenticationPopup, setLoginPopup, setIsLoginPage, setFindFoodByLocationPopup, setUserCartModal, isOverlay, setIsOverlay, isDropdownMenu, setIsDropdownMenu } = useContext(storeContext)
 
     const userData = useSelector((state) => state.user.userData)
     const allRestaurantData = useSelector((state) => state.cart.allRestaurantData);
-    
+
     //Get location from localStorage
     let defaultLocation = JSON.parse(localStorage.getItem('defaultLocation'))
-    
-    
+
+
     return (
         <div className='w-full'>
             <div className='flex items-center justify-between px-10 py-8 shadow'>
@@ -24,12 +24,15 @@ const DesktopNavbar = () => {
                     <SiIfood />
                     <p>Foodify.</p>
                 </div>
-                <div
-                    onClick={() => setFindFoodByLocationPopup(true)}
-                    className='flex items-center gap-2 justify-center text-[17px] font-medium text-gray-600 px-3 py-1 rounded cursor-pointer hover:bg-gray-50'>
-                    <GrLocation className='text-2xl font-medium' />
-                    <p className='truncate max-w-[200px]'>{defaultLocation?.display_name}</p>
-                </div>
+                {
+                    defaultLocation &&
+                    <div
+                        onClick={() => setFindFoodByLocationPopup(true)}
+                        className='flex items-center gap-2 justify-center text-[17px] font-medium text-gray-600 px-3 py-1 rounded cursor-pointer hover:bg-gray-50'>
+                        <GrLocation className='text-2xl font-medium' />
+                        <p className='truncate max-w-[200px] xl:max-w-[300px]'>{defaultLocation?.display_name}</p>
+                    </div>
+                }
                 <div className='flex items-center gap-10'>
                     {
                         !userData ?
@@ -39,8 +42,8 @@ const DesktopNavbar = () => {
                             </div>
                             :
                             <button onClick={() => {
-                                setUserProfilePopup(true);
-                                setIsScroll(true)
+                                setIsOverlay(!isOverlay);
+                                setIsDropdownMenu(!isDropdownMenu)
                             }} className='flex items-center gap-1 text-gray-700 hover:bg-orange-100 px-3 py-1 rounded cursor-pointer'>
                                 <FaRegUser className='text-2xl' />
                                 <p className='text-[18px] font-semibold'>{userData?.profile?.name}</p>
