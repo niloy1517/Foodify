@@ -11,14 +11,14 @@ const SwiperSlider = ({ restaurants }) => {
   const nextRef = useRef(null);
 
   return (
-    <div className='w-full relative'>
-      <button className="hidden md:flex new-prev p-3 rounded-full border border-gray-300 bg-white absolute left-[-15px] hover:scale-120 transform top-1/2 -translate-y-1/2 z-20 cursor-pointer">
+    <div className='relative'>
+      <button className="hidden md:flex new-prev p-3 rounded-full border border-gray-300 bg-white absolute left-[-15px] hover:scale-120 transform top-1/2 -translate-y-1/2 z-10 cursor-pointer">
         <FaArrowLeft />
       </button>
       <Swiper
         modules={[Navigation]}
         slidesPerView="auto"
-        spaceBetween={16}
+        spaceBetween={12}
         navigation={{
           prevEl: ".new-prev",
           nextEl: ".new-next",
@@ -30,9 +30,9 @@ const SwiperSlider = ({ restaurants }) => {
             restaurants?.slice(0, 6).map(restaurant => (
               <SwiperSlide
                 key={restaurant._id}
-                className='min-w-56 max-w-75 min-h-60 max-h-64 shrink-0 border border-gray-300 rounded-2xl overflow-hidden cursor-pointer'
+                className='min-w-56 max-w-72 max-h-70  shrink-0 rounded-[10px] overflow-hidden cursor-pointer'
               >
-                <RestaurantCard restaurant={restaurant} />
+                <RestaurantCard restaurant={restaurant} from="swiperJsx" />
               </SwiperSlide>
             ))
           }
@@ -40,7 +40,7 @@ const SwiperSlider = ({ restaurants }) => {
 
 
       </Swiper>
-      <button className="hidden md:flex new-next p-3 rounded-full border border-gray-300 bg-white absolute right-[-15px] hover:scale-120 transform top-1/2 -translate-y-1/2 z-20 cursor-pointer">
+      <button className="hidden md:flex new-next p-3 rounded-full border border-gray-300 bg-white absolute right-[-15px] hover:scale-120 transform top-1/2 -translate-y-1/2 z-10 cursor-pointer">
         <FaArrowRight />
       </button>
     </div>

@@ -12,7 +12,7 @@ const NewRestaurantsPage = () => {
   }
 
   return (
-    <div className='w-full  '>
+    <div className='w-full'>
       <h1 className='text-3xl font-semibold text-gray-700 py-8'>New on Foodify</h1>
       <SwiperSlider restaurants={[...restaurants].reverse()} />
     </div>

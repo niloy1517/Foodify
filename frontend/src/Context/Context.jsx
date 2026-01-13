@@ -2,6 +2,7 @@ import React, { createContext, useState } from 'react'
 import { useEffect } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import { restaurantService } from '../Services/restaurant.service'
 
 
 export const storeContext = createContext(null)
@@ -35,6 +36,111 @@ const Context = ({ children }) => {
 
   //Restaurants
   const [restaurants, setRestaurants] = useState([]);
+
+  //Category id for search category wise restaurants
+  const [categoryId, setCategoryId] = useState('')
+
+  //Global overlay state
+  const [isOverlay, setIsOverlay] = useState(false)
+
+
+  //Restaurants filter state
+  const [filters, setFilters] = useState(() => {
+    const saved = localStorage.getItem('filters');
+    return saved ? JSON.parse(saved)
+      : {
+        sortBy: "",
+        cuisine: "",
+        rating: "",
+        priceOrder: ""
+      }
+
+  })
+
+  useEffect(() => {
+    const savedFilters = localStorage.getItem('filters')
+
+    if (savedFilters) {
+      setFilters(JSON.parse(savedFilters))
+    } else {
+      console.log('nothing found ', savedFilters)
+    }
+  }, [])
+
+
+  useEffect(() => {
+    if (filters) {
+      console.log('filter', filters)
+      localStorage.setItem('filters', JSON.stringify(filters))
+    }
+  }, [filters])
+
+
+  const updateFilter = (key, value) => {
+    setFilters(prev => ({
+      ...prev,
+      [key]: value
+    }))
+  }
+
+  // store user location from localStorage
+  const userLocation = JSON.parse(localStorage.getItem('defaultLocation'))
+
+
+
+  // Clear All
+  const clearFilter = async () => {
+    localStorage.setItem('filters', JSON.stringify({
+      sortBy: "",
+      cuisine: "",
+      rating: "",
+      priceOrder: ""
+    }))
+
+    setFilters({
+      sortBy: "",
+      cuisine: "",
+      rating: "",
+      priceOrder: ""
+    })
+
+
+    try {
+      const response = await restaurantService.getNearBy({ lat: userLocation.lat, lng: userLocation.lon });
+      setRestaurants(response.data.data)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  const getFilteredRestaurants = async () => {
+
+    const userLat = userLocation?.lat;
+    const userLng = userLocation?.lon;
+
+    let query = new URLSearchParams();
+
+    if (filters.sortBy) query.append('sortBy', filters.sortBy);
+    if (filters.cuisine) query.append('cuisine', filters.cuisine);
+    if (filters.rating) query.append('rating', filters.rating);
+    if (filters.priceOrder) query.append('priceOrder', filters.priceOrder);
+    if (userLat) query.append('lat', userLat);
+    if (userLng) query.append('lng', userLng);
+
+
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/restaurant/search?${query.toString()}`
+      );
+
+      if (response.data.message) {
+        setRestaurants(response.data.data)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
 
   const fetchLocationAddress = async (lat, lng) => {
@@ -79,7 +185,7 @@ const Context = ({ children }) => {
       setCoordinates({ lat: latitude, lng: longitude })
       fetchLocationAddress(latitude, longitude)
       setLoading(false)
-     
+
     }, (error) => {
       setError(error.message)
       setLoading(false)
@@ -131,6 +237,12 @@ const Context = ({ children }) => {
     addressData, setAddressData,
     isMobileFilterbarModal, setIsMobileFilterbarModal,
     restaurants, setRestaurants,
+    categoryId, setCategoryId,
+    isOverlay, setIsOverlay,
+    filters, setFilters,
+    updateFilter,
+    clearFilter,
+    getFilteredRestaurants
   }
   return (
     <storeContext.Provider value={contextValue}>

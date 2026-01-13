@@ -65,7 +65,7 @@ const MobileCartPopup = () => {
   }
 
 
-  console.log(items)
+
   return (
     <div className='bg-white'>
       <div>

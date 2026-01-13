@@ -10,8 +10,8 @@ import MainPage from '../pages/MainPage/MainPage'
 import Checkout from '../pages/checkout'
 import PaymentSuccessfull from '../pages/PaymentSuccessfull'
 import PaymentFailed from '../pages/PaymentFailed'
-import RestaurantFindByCategory from '../pages/RestaurantFindByCategory'
 import viewMobileCartDetails from '../pages/viewMobileCartDetails'
+import FilteredRestaurantsPage from '../pages/FilteredRestaurantsPage'
 
 
 const route = createBrowserRouter([
@@ -28,7 +28,7 @@ const route = createBrowserRouter([
             { path: '/restaurants', Component: MainPage },
             { path: `/payment-success/:id`, Component: PaymentSuccessfull },
             { path: '/payment-failed/:id', Component: PaymentFailed },
-            { path: '/category/restaurant/:id', Component: RestaurantFindByCategory }
+            { path: '/restaurants/new', Component: FilteredRestaurantsPage }
         ]
     },
 

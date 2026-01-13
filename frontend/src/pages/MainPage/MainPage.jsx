@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import FilterBar from '../Filterbar/DesktopFilterbar'
 import SearchBar from '../SearchBar'
 import MenuCategory from '../MenuCategory'
 import { useContext } from 'react'
@@ -9,17 +8,18 @@ import AllRestaurantsPage from '../AllRestaurantsPage'
 import NewRestaurantsPage from '../NewRestaurantsPage'
 import FindFoodByLocation from '../FindFoodByLocation'
 import { useLocationRestaurants } from '../../Hooks/useLocationRestaurants'
+import DesktopFilterbar from '../Filterbar/DesktopFilterbar'
 
 
 
 const MainPage = () => {
-  const { findFoodByLocationPopup, setFindFoodByLocationPopup } = useContext(storeContext)
+  const { findFoodByLocationPopup, setFindFoodByLocationPopup, isOverlay } = useContext(storeContext)
 
-  const [showCateRestaurants, setShowCateRestaurants] = useState(false)
+  const [showFilteredRestaurants, setShowFilteredRestaurants] = useState(false)
   // const [showFilteredRestaurant, setShowFilteredRestaurant] = useState(false)
   const { isMobileFilterbarModal } = useContext(storeContext)
 
-  const {setFullAddressData, setCoordinates} = useLocationRestaurants()
+  const { setFullAddressData, setCoordinates } = useLocationRestaurants()
 
   useEffect(() => {
     // store user location from localStorage
@@ -28,12 +28,37 @@ const MainPage = () => {
     setFullAddressData(userLocation)
   }, [])
 
+
+  const [isFiltered, setIsFiltered] = useState(false);
+
+  const [hideFilterbar, setHideFilterbar] = useState(true);
+
+
   return (
-    <div className='w-full flex'>
-      {/* Sidebar */}
-      <div className='hidden xl:flex sticky self-start h-fit top-[16%] left-0 w-64'>
-        <FilterBar />
+    <div className='w-full'>
+      <div className='w-full flex'>
+        {/* Sidebar */}
+        <div className={`hidden xl:flex sticky self-start h-fit top-24  ${isOverlay && '-z-10'} `}>
+          <DesktopFilterbar
+            setShowFilteredRestaurants={setShowFilteredRestaurants}
+          />
+        </div>
+        {/* Main content */}
+        <div className='w-full grid grid-cols-1 px-8 xl:px-16 '>
+          <SearchBar
+            isFiltered={isFiltered}
+          />
+
+          <div className={`mt-14 relative ${isOverlay && '-z-30'}`}>
+            <MenuCategory />
+            <NewRestaurantsPage />
+            <AllRestaurantsPage />
+          </div>
+        </div>
       </div>
+
+
+
 
       {
         findFoodByLocationPopup &&
@@ -42,24 +67,14 @@ const MainPage = () => {
         </div>
       }
 
-      {/* Main content */}
-      <div className='mx-auto flex flex-col gap-15 px-4 w-[98%] xl:w-[78%]'>
-        <SearchBar />
-
-        <MenuCategory />
-
-        <NewRestaurantsPage />
-
-        <AllRestaurantsPage />
-
-        <div className='h-20'></div>
-
-        {/* Mobile filterbar modal */}
-        {
-          isMobileFilterbarModal &&
-          <MobileFilterbarModal />
-        }
-      </div>
+      {/* Mobile filterbar modal */}
+      {
+        isMobileFilterbarModal &&
+        <MobileFilterbarModal
+          setShowFilteredRestaurants={setShowFilteredRestaurants}
+          setIsFiltered={setIsFiltered}
+        />
+      }
     </div>
   )
 }

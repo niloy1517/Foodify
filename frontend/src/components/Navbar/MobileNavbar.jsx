@@ -14,7 +14,7 @@ const MobileNavbar = () => {
 
     
     return (
-        <div>
+        <div className='z-50'>
             <div className='py-2 shadow'>
                 <div className='flex justify-between items-center px-6 py-2'>
                     {

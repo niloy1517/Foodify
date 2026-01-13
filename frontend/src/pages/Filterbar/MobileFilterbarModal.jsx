@@ -6,22 +6,17 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { useEffect } from 'react';
+import { restaurantService } from '../../Services/restaurant.service';
+import { useNavigate } from 'react-router-dom';
 
-const MobileFilterbarModal = ({ setShowFilteredRestaurant }) => {
-  const { setIsMobileFilterbarModal, setRestaurants } = useContext(storeContext)
-
-  const [filters, setFilters] = useState({
-    sortBy: "relevance",
-    cuisine: "",
-    rating: "",
-    priceOrder: "",
-  });
+const MobileFilterbarModal = ({ setShowFilteredRestaurants, setIsFiltered }) => {
+  const { setIsMobileFilterbarModal, setRestaurants, filters, setFilters, updateFilter, getFilteredRestaurants, clearFilter } = useContext(storeContext)
 
 
-  const [apiFilters, setApiFilters] = useState({});
-
-  const [cuisineQueryKeyword, setCuisineQueryKeyword] = useState('');
+  
   const [showCuisine, setShowCuisine] = useState(8);
+  const [cuisineQueryKeyword, setCuisineQueryKeyword] = useState('')
+
 
   const asianCuisines = [
     "Bangladeshi", "Indian", "Pakistani", "Chinese", "Thai", "Japanese",
@@ -30,93 +25,27 @@ const MobileFilterbarModal = ({ setShowFilteredRestaurant }) => {
     "dhaka briyani", "dhaka puchka house", "breackfast", "rute", "salad", "nasta"
   ];
 
-  // Update Filter
-  const updateFilter = (key, value) => {
-    setFilters(prev => ({
-      ...prev,
-      [key]: prev[key] === value ? "" : value
-    }));
-
-    setApiFilters(prev => ({
-      ...prev,
-      [key]: prev[key] === value ? "" : value
-    }));
-  };
-
-  // Clear All
-  const clearFilter = () => {
-    setFilters({
-      sortBy: "relevance",
-      cuisine: "",
-      rating: "",
-      priceOrder: ""
-    });
-
-    setApiFilters({});
-    setCuisineQueryKeyword("");
-  };
-
-  const userData = useSelector((state) => state.user.userData);
-
-  // store user location from localStorage
-  const userLocation = JSON.parse(localStorage.getItem('defaultLocation'))
-  
-  const getRestaurants = async () => {
-    // const userLat = userData?.address?.[0]?.location?.coordinates?.[1];
-    // const userLng = userData?.address?.[0]?.location?.coordinates?.[0];
-
-    const userLat = userLocation?.lat;
-    const userLng = userLocation?.lon;
-
-    let query = new URLSearchParams();
-
-    if (apiFilters.sortBy) query.append('sortBy', apiFilters.sortBy);
-    if (apiFilters.cuisine) query.append('cuisine', apiFilters.cuisine);
-    if (apiFilters.rating) query.append('rating', apiFilters.rating);
-    if (apiFilters.priceOrder) query.append('priceOrder', apiFilters.priceOrder);
-    if (userLat) query.append('lat', userLat);
-    if (userLng) query.append('lng', userLng);
-
-    try {
-      const response = await axios.get(
-        `http://localhost:5000/api/restaurant/search?${query.toString()}`
-      );
-
-      if (response.data.message) {
-        setRestaurants(response.data.data)
-        setShowFilteredRestaurant(true)
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setApiFilters({});
-    }
-  };
-
-
-  // CALL API 
-  // useEffect(() => {
-  //   if (apiFilters.sortBy || apiFilters.cuisine || apiFilters.rating || apiFilters.priceOrder) {
-  //     getRestaurants();
-  //   }
-  // }, [apiFilters]);
-
 
   // Cuisine search logic
-  const cuisineBySearch = cuisineQueryKeyword === ""
-    ? []
-    : asianCuisines.filter(keyword =>
-      keyword.toLowerCase().startsWith(cuisineQueryKeyword.toLowerCase())
-    );
+  const keyword = cuisineQueryKeyword.trim().toLowerCase();
+  const cuisineBySearch = keyword ? 
+    asianCuisines.filter(item =>
+      item.toLowerCase().includes(keyword)
+    ) : [];
 
 
+  const navigate = useNavigate()  
 
   return (
     <div className='fixed top-0 left-0 w-full h-[100vh] pb-50 overflow-y-auto bg-white z-30 p-6 xl:hidden'>
       <div className='w-full flex justify-between items-center font-semibold text-gray-700'>
         <p className='text-2xl'>Filters</p>
         <IoCloseOutline
-          onClick={() => setIsMobileFilterbarModal(false)}
+          onClick={() => {
+            setIsMobileFilterbarModal(false);
+            clearFilter();
+            setCuisineQueryKeyword("");
+          }}
           className='text-3xl cursor-pointer'
         />
       </div>
@@ -129,9 +58,9 @@ const MobileFilterbarModal = ({ setShowFilteredRestaurant }) => {
           <label className='flex gap-1.5 py-1.5 items-center cursor-pointer text-[15px]'>
             <input
               type="radio"
-              checked={filters.sortBy === "relevance"}
-              onClick={() => updateFilter("sortBy", "relevance")}
-              className='w-4.5 h-4.5 accent-orange-600'
+              checked={filters.sortBy === ""}
+              onClick={() => updateFilter("sortBy", "")}
+              className='w-4.5 h-4.5 accent-black'
             />
             Relevance
           </label>
@@ -139,9 +68,12 @@ const MobileFilterbarModal = ({ setShowFilteredRestaurant }) => {
           <label className='flex gap-1.5 py-1.5 items-center cursor-pointer text-[15px]'>
             <input
               type="radio"
-              checked={filters.sortBy === "rating"}
-              onClick={() => updateFilter("sortBy", "rating")}
-              className='w-4.5 h-4.5 accent-orange-600'
+              checked={filters.sortBy === "topRated"}
+              onClick={() => {
+                updateFilter("sortBy", "topRated");
+                setShowFilteredRestaurants(true)
+              }}
+              className='w-4.5 h-4.5 accent-black'
             />
             Top Rated
           </label>
@@ -151,7 +83,7 @@ const MobileFilterbarModal = ({ setShowFilteredRestaurant }) => {
               type="radio"
               checked={filters.sortBy === "distance"}
               onClick={() => updateFilter("sortBy", "distance")}
-              className='w-4.5 h-4.5 accent-orange-600'
+              className='w-4.5 h-4.5 accent-black'
             />
             Distance
           </label>
@@ -160,8 +92,11 @@ const MobileFilterbarModal = ({ setShowFilteredRestaurant }) => {
             <input
               type="radio"
               checked={filters.sortBy === "delivery"}
-              onClick={() => updateFilter("sortBy", "delivery")}
-              className='w-4.5 h-4.5 accent-orange-600'
+              onClick={() => {
+                updateFilter("sortBy", "delivery");
+                setShowFilteredRestaurants(true)
+              }}
+              className='w-4.5 h-4.5 accent-black'
             />
             Faster Delivery
           </label>
@@ -177,20 +112,29 @@ const MobileFilterbarModal = ({ setShowFilteredRestaurant }) => {
 
         <div className='flex items-start gap-3 text-[15px] mt-8 font-medium text-gray-700'>
           <button
-            onClick={() => updateFilter("rating", "4")}
-            className='px-2.5 py-1 rounded-2xl cursor-pointer border border-gray-300 hover:bg-gray-100'>
+            onClick={() => {
+              filters.rating ? updateFilter("rating", "") : updateFilter("rating", "4");
+              setShowFilteredRestaurants(true);
+            }}
+            className={`${filters.rating ? 'bg-black text-white border-0' : ''} px-2.5 py-1 rounded-2xl cursor-pointer border border-gray-300`}>
             Ratings 4+
           </button>
 
           <button
-            onClick={() => updateFilter("priceOrder", "highToLow")}
-            className='px-2.5 py-1 rounded-2xl cursor-pointer border border-gray-300 hover:bg-gray-100'>
+            onClick={() => {
+              filters.priceOrder === 'highToLow' ? updateFilter("priceOrder", "") : updateFilter("priceOrder", "highToLow");
+              setShowFilteredRestaurants(true)
+            }}
+            className={`${filters.priceOrder === 'highToLow' ? 'bg-black text-white border-0' : ''} px-2.5 py-1 rounded-2xl cursor-pointer border border-gray-300`}>
             High to Low Price
           </button>
 
           <button
-            onClick={() => updateFilter("priceOrder", "lowToHigh")}
-            className='px-2.5 py-1 rounded-2xl cursor-pointer border border-gray-300 hover:bg-gray-100'>
+            onClick={() => {
+              filters.priceOrder === 'lowToHigh' ? updateFilter("priceOrder", "") : updateFilter("priceOrder", "lowToHigh");
+              setShowFilteredRestaurants(true)
+            }}
+            className={`${filters.priceOrder === 'lowToHigh' ? 'bg-black text-white border-0' : ''} px-2.5 py-1 rounded-2xl cursor-pointer border border-gray-300`}>
             Low to High Price
           </button>
         </div>
@@ -230,8 +174,11 @@ const MobileFilterbarModal = ({ setShowFilteredRestaurant }) => {
                 <input
                   type="checkbox"
                   checked={filters.cuisine === cuisine}
-                  onClick={() => updateFilter("cuisine", cuisine)}
-                  className='w-4 h-4 accent-orange-600'
+                  onClick={() => {
+                    filters.cuisine === cuisine ? updateFilter("cuisine", '') : updateFilter("cuisine", cuisine);
+                    setShowFilteredRestaurants(true)
+                  }}
+                  className='w-4 h-4 accent-black'
                 />
 
                 {cuisine}
@@ -260,8 +207,17 @@ const MobileFilterbarModal = ({ setShowFilteredRestaurant }) => {
       </div>
 
       <div className='w-full px-4 h-40 fixed flex flex-col gap-4 justify-center items-center left-0 bottom-0 bg-white border-t border-gray-200'>
-        <button onClick={() => { getRestaurants(); setIsMobileFilterbarModal(false) }} className='w-full h-14 rounded-2xl bg-orange-600 font-semibold cursor-pointer text-white'>Apply</button>
-        <button onClick={clearFilter} className='w-full h-14 rounded-2xl border border-gray-400 font-semibold cursor-pointer text-gray-700'>Clear All</button>
+        <button onClick={() => {
+          getFilteredRestaurants();
+          setIsMobileFilterbarModal(false);
+          setIsFiltered(true);
+          navigate('/restaurants/new')
+        }} className='w-full h-14 rounded-2xl bg-orange-600 font-semibold cursor-pointer text-white'>Apply</button>
+        <button onClick={() => {
+          clearFilter();
+          setIsMobileFilterbarModal(false);
+          setCuisineQueryKeyword("");
+        }} className='w-full h-14 rounded-2xl border border-gray-400 font-semibold cursor-pointer text-gray-700'>Clear All</button>
       </div>
     </div>
   )

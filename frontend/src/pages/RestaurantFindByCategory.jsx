@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React from 'react'
+import React, { useContext } from 'react'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -10,9 +10,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setRestaurantId } from '../Service/Redux/Slice/RestaurantSlice'
 import { PiDotOutlineFill } from "react-icons/pi";
 import { TbCurrencyTaka } from "react-icons/tb";
+import { storeContext } from '../Context/Context'
 
 const RestaurantFindByCategory = () => {
-  const { id } = useParams()
+  const { categoryId } = useContext(storeContext)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -29,16 +30,23 @@ const RestaurantFindByCategory = () => {
   }
 
 
-
+  // store user location from localStorage
+  const userLocation = JSON.parse(localStorage.getItem('defaultLocation'))
 
   const getRestaurants = async () => {
-    const userLat = userData?.address[0]?.location?.coordinates[1]
-    const userLng = userData?.address[0]?.location?.coordinates[0]
+
+    // const userLat = userData?.address[0]?.location?.coordinates[1]
+    // const userLng = userData?.address[0]?.location?.coordinates[0]
+
+    const userLat = userLocation?.lat;
+    const userLng = userLocation?.lon;
+
     const query = new URLSearchParams({
-      categoryId: id,
+      categoryId,
       lat: userLat,
       lng: userLng
     })
+console.log(categoryId)    
     try {
       const response = await axios.get(`http://localhost:5000/api/restaurant/search?${query.toString()}`)
       setRestaurants(response.data.data)
@@ -50,7 +58,7 @@ const RestaurantFindByCategory = () => {
 
   useEffect(() => {
     getRestaurants()
-  }, [])
+  }, [categoryId])
   return (
     <div className='w-full p-10'>
       <h1 className='text-3xl font-semibold text-gray-700 mb-10'>{restaurants?.length > 0 ? `${restaurants?.length} Restaurants found` : 'Restaurants Not Found'}</h1>

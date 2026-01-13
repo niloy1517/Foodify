@@ -95,7 +95,7 @@ const RestaurantSlider = () => {
                                             <TbCurrencyTaka />
                                         </div>
                                         <div className='flex items-center shrink-0 truncate '>
-                                            {JSON.parse(restaurant.cuisines).map((cuisine, index) => (
+                                            {restaurant.cuisines.map((cuisine, index) => (
                                                 <div key={index} className='flex items-center'>
                                                     <PiDotOutlineFill />
                                                     <p key={cuisine.index}>{cuisine}</p>

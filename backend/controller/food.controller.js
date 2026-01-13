@@ -157,4 +157,18 @@ const getFoodItem = async (req, res) => {
     }
 }
 
-export { restaurantFoodAdd, restaurantFoodUpdate, restaurantFoodDelete, getRestaurantFoodList, getFoodItem }
+const getAllFoods = async (req, res) => {
+    try {
+        const foods = await foodModel.find();
+
+        if (!foods) {
+            return res.status(404).json({ success: false, message: 'Foods not found!' })
+        }
+
+        res.status(200).json({ success: true, message: 'Foods found!', data: foods })
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Something is wrong try again!' })
+    }
+}
+
+export { restaurantFoodAdd, restaurantFoodUpdate, restaurantFoodDelete, getRestaurantFoodList, getFoodItem, getAllFoods }

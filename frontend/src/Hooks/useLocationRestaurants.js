@@ -17,7 +17,7 @@ export const useLocationRestaurants = () => {
 
     const [coordinates, setCoordinates] = useState({ lat: null, lng: null });
 
-console.log(coordinates)
+
     const saveAddressInLocalStorage = () => {
         localStorage.setItem('defaultLocation', JSON.stringify(fullAddressData))
     }
@@ -156,6 +156,6 @@ console.log(coordinates)
         setCoordinates,
         saveAddressInLocalStorage,
         locateLocation,
-        MapEventHandler
+        MapEventHandler,
     };
 };

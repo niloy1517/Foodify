@@ -2,9 +2,9 @@ import React, { useContext } from 'react'
 import Authentication from '../Authentication/Authentication'
 import Hero from '../pages/Hero'
 import { storeContext } from '../Context/Context'
-import RestaurantSlider from '../pages/RestaurantSlider'
 import RestaurantPartner from '../pages/RestaurantPartner'
 import AvailableDistricts from '../pages/AvailableDistricts'
+import PopularRestaurantsPage from '../pages/PopularRestaurantsPage'
 
 const Root = () => {
     const {showAuthenticationPopup, setShowAuthenticationPopup} = useContext(storeContext)
@@ -16,7 +16,7 @@ const Root = () => {
             showAuthenticationPopup && 
             <Authentication />
         }
-        <RestaurantSlider />
+        <PopularRestaurantsPage />
         <RestaurantPartner />
         <AvailableDistricts />
     </div>
