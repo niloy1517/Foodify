@@ -9,7 +9,7 @@ import NewRestaurantsPage from '../NewRestaurantsPage'
 import FindFoodByLocation from '../FindFoodByLocation'
 import { useLocationRestaurants } from '../../Hooks/useLocationRestaurants'
 import DesktopFilterbar from '../Filterbar/DesktopFilterbar'
-
+import FilteredRestaurantsPage from '../FilteredRestaurantsPage'
 
 
 const MainPage = () => {
@@ -30,35 +30,49 @@ const MainPage = () => {
 
 
   const [isFiltered, setIsFiltered] = useState(false);
-
+  const [hideDesktopFilterbar, setHideDesktopFilterbar] = useState(false);
+  const [hideSearchbar, setHideSearchbar] = useState(false);
+  const [hideMainContent, setHideMainContent] = useState(false)
   const filterCounter = Object.values(filters).filter(f => f !== '').length;
 
 
 
   return (
-    <div className='w-full'>
+    <div className='w-full min-h-screen h-auto'>
       <div className='w-full flex'>
         {/* Sidebar */}
-        <div className={`hidden xl:flex sticky self-start h-fit top-24  ${isOverlay && '-z-10'} `}>
-          <DesktopFilterbar
-            setIsFiltered={setIsFiltered}
-            setShowFilteredRestaurants={setShowFilteredRestaurants}
-          />
-        </div>
+        {
+          !hideDesktopFilterbar &&
+          <div className={`hidden xl:flex sticky self-start h-fit top-24  ${isOverlay && '-z-10'} `}>
+            <DesktopFilterbar
+              setShowFilteredRestaurants={setShowFilteredRestaurants}
+              setIsFiltered={setIsFiltered}
+            />
+          </div>
+        }
         {/* Main content */}
         {
-          filterCounter === 0 &&
+          filterCounter === 0 ?
           <div className={`w-full grid grid-cols-1 px-4 md:px-8 xl:px-16 ${isDropdownMenu && '-z-10'} `}>
             <SearchBar
-              isFiltered={isFiltered}
+              setIsFiltered={setIsFiltered}
+              setHideDesktopFilterbar={setHideDesktopFilterbar}
+              setHideMainContent={setHideMainContent}
             />
 
-            <div className={`mt-14 relative ${isOverlay && '-z-30'}`}>
-              <MenuCategory />
-              <NewRestaurantsPage />
-              <AllRestaurantsPage />
-            </div>
+            {
+              !hideMainContent ?
+              <div className={`mt-14 relative ${isOverlay && '-z-30'}`}>
+                <MenuCategory />
+                <NewRestaurantsPage />
+                <AllRestaurantsPage />
+              </div>
+              :
+              <FilteredRestaurantsPage />
+            }
           </div>
+          :
+          <FilteredRestaurantsPage />
         }
       </div>
 

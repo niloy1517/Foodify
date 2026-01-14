@@ -25,10 +25,10 @@ const route = createBrowserRouter([
             { path: '/restaurants/district', Component: DistrictRestaurantList },
             { path: '/checkout', Component: Checkout },
             { path: '/order', Component: OrderList },
-            { path: '/restaurants', Component: MainPage },
+            { path: `/restaurants/new`, Component: MainPage },
             { path: `/payment-success/:id`, Component: PaymentSuccessfull },
             { path: '/payment-failed/:id', Component: PaymentFailed },
-            { path: '/restaurants/new', Component: FilteredRestaurantsPage }
+            // { path: '/restaurants/new', Component: FilteredRestaurantsPage }
         ]
     },
 

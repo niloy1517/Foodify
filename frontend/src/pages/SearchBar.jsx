@@ -12,7 +12,7 @@ import { useLocationRestaurants } from '../Hooks/useLocationRestaurants';
 import { restaurantService } from '../Services/restaurant.service';
 import { useNavigate } from 'react-router-dom';
 
-const SearchBar = ({ isFiltered }) => {
+const SearchBar = ({ setHideDesktopFilterbar, setHideMainContent }) => {
     const { setRestaurants, setIsMobileFilterbarModal, isOverlay, setIsOverlay, filters, clearFilter } = useContext(storeContext);
 
     const { setCoordinates } = useLocationRestaurants()
@@ -24,11 +24,12 @@ const SearchBar = ({ isFiltered }) => {
     const [recentSearchKeyword, setRecentSearchKeyword] = useState([]);
     const [recentKeywordPopup, setRecentKeywordPopup] = useState(false);
     const [queryKeyword, setQueryKeyword] = useState(() => {
-        const saved = localStorage.getItem('queryKeyword');
-        return saved ? saved : ''
+        const saved = localStorage.getItem('searchKeyword')
+        return saved ? JSON.parse(saved) : ''
     });
 
     const [searchKeywords, setSearchKeywords] = useState([])
+
 
 
     const inputRef = useRef(null);
@@ -46,31 +47,46 @@ const SearchBar = ({ isFiltered }) => {
     // Store user location from localStorage
     const userLocation = JSON.parse(localStorage.getItem('defaultLocation'))
 
-    // Store query keyword in localStorage
-    localStorage.setItem('queryKeyword', queryKeyword);
+    // Store search keyword in localStorage
+    localStorage.setItem('searchKeyword', JSON.stringify(queryKeyword))
 
+
+    const saved = JSON.parse(localStorage.getItem('searchKeyword'))
+
+    useEffect(() => {
+        if (saved) {
+            setHideDesktopFilterbar(true);
+            setHideMainContent(true)
+        }
+
+        if (queryKeyword.length < 3) return;
+        const debounceTimer = setTimeout( async () => {
+            let query = new URLSearchParams({
+                searchKeyword: queryKeyword,
+                lat: userLocation.lat,
+                lng: userLocation.lon,
+            })
+            try {
+                const response = await axios.get(`http://localhost:5000/api/restaurant/search?${query.toString()}`)
+                if (response.data.message) {
+                    setRestaurants(response.data.data)
+                    query = ''
+                }
+                console.log(response)
+            } catch (error) {
+                console.log(error)
+            }
+        }, 300)
+
+        return () => clearTimeout(debounceTimer)
+
+    }, [queryKeyword])
 
 
     const filterCounter = Object.values(filters).filter(f => f !== '').length;
 
 
-    const getRestaurantsBySearch = async (searchKeyword) => {
-        let query = new URLSearchParams({
-            searchKeyword,
-            lat: userLocation.lat,
-            lng: userLocation.lon,
-        })
-        try {
-            const response = await axios.get(`http://localhost:5000/api/restaurant/search?${query.toString()}`)
-            if (response.data.message) {
-                setRestaurants(response.data.data)
-                query = ''
-            }
-            console.log(response)
-        } catch (error) {
-            console.log(error)
-        }
-    }
+
 
 
 
@@ -108,8 +124,8 @@ const SearchBar = ({ isFiltered }) => {
 
     const suggestkeyworyBySearch = queryKeyword === ''
         ? []
-        : searchKeywords.filter(keyword =>
-            keyword.toLowerCase().startsWith(queryKeyword.toLowerCase())
+        : searchKeywords?.filter(keyword =>
+            keyword.toLowerCase().includes(queryKeyword.toLowerCase())
         );
 
     const handleRecentSearchKeywordAdd = (keyword) => {
@@ -120,7 +136,7 @@ const SearchBar = ({ isFiltered }) => {
     };
 
     const handleRecentSearchKeywordDel = (key) => {
-        const keyword = recentSearchKeyword.filter(keyword => keyword !== key);
+        const keyword = recentSearchKeyword?.filter(keyword => keyword !== key);
         setRecentSearchKeyword(keyword);
     };
 
@@ -169,13 +185,21 @@ const SearchBar = ({ isFiltered }) => {
     const navigate = useNavigate()
 
 
+
+    const baseUrl = `/restaurants/new?lat=${userLocation?.lat}&lng=${userLocation?.lon}`;
+
+    const handleNavigate = (keyword) => {
+        const queryString = new URLSearchParams({ 'query': keyword }).toString()
+        navigate(queryString ? `${baseUrl}&${queryString}` : baseUrl)
+    }
+
     return (
         <div className={`w-full relative`}>
             <div onClick={(e) => e.stopPropagation()} className=''>
-                <div className='w-full flex items-center pt-6 gap-4 text-gray-700'>
+                <div className='w-full max-w-[800px] flex items-center pt-6 gap-4 text-gray-700'>
                     {
                         filterCounter === 0 &&
-                        <div className='w-full h-16 md:h-18 flex items-center lg:text-[18px] px-2 rounded-3xl bg-gray-100'>
+                        <div className='w-full h-16 md:h-18 flex items-center lg:text-[18px] px-3 rounded-3xl bg-gray-100'>
                             <RiSearchLine className='text-2xl' />
                             <input
                                 ref={inputRef}
@@ -192,14 +216,24 @@ const SearchBar = ({ isFiltered }) => {
                             />
                             <div>
                                 {
-                                    queryKeyword.length > 0 &&
-                                    <RxCross2 onClick={() => { deleteFilterdRestaurants(); setIsOverlay(false); setQueryKeyword(''); navigate('/restaurants') }} className='cursor-pointer' />
+                                    queryKeyword?.length > 0 &&
+                                    <RxCross2 onClick={() => {
+                                        deleteFilterdRestaurants();
+                                        setIsOverlay(false);
+                                        setQueryKeyword('');
+                                        navigate(baseUrl);
+                                        setHideDesktopFilterbar(false);
+                                        setHideMainContent(false);
+                                        setHideDesktopFilterbar(false);
+                                        setHideMainContent(false)
+                                    }}
+                                        className='cursor-pointer' />
                                 }
                             </div>
                         </div>
                     }
                     {
-                        !isOverlay && queryKeyword.length === 0 &&
+                        !isOverlay && queryKeyword?.length === 0 &&
                         <div className={`${filterCounter > 0 && 'w-full'}`}>
                             {
                                 filterCounter > 0 ?
@@ -210,7 +244,7 @@ const SearchBar = ({ isFiltered }) => {
                                             <span className='pl-1'>Filters: {filters.sortBy === 'topRated' && 'Top Rated,' || filters.sortBy === 'delivery' && 'Faster delivery,'} {filters.rating && 'Rating 4+'}</span>
                                         </div>
                                         <div className='size-8 rounded-full hover:bg-white flex items-center justify-center'>
-                                            <RxCross2 onClick={() => { clearFilter(), navigate('/restaurants') }} className='text-2xl cursor-pointer' />
+                                            <RxCross2 onClick={() => { clearFilter(); handleNavigate() }} className='text-2xl cursor-pointer' />
                                         </div>
                                     </div>
                                     :
@@ -239,11 +273,14 @@ const SearchBar = ({ isFiltered }) => {
                                                         className='w-full rounded-2xl flex items-center gap-1 py-1 mt-2 cursor-pointer'
                                                         onClick={() => {
                                                             setIsOverlay(false);
-                                                            getRestaurantsBySearch(searchKeyword);
                                                             setQueryKeyword(searchKeyword);
                                                             setSuggestKeywordBySearchPopup(false);
                                                             handleRecentSearchKeywordAdd(searchKeyword);
-                                                            navigate('/restaurants/new')
+                                                            handleNavigate(searchKeyword);
+                                                            setHideDesktopFilterbar(true);
+                                                            setHideMainContent(true);
+                                                            setHideDesktopFilterbar(true);
+                                                            setHideMainContent(true)
                                                         }}
                                                     >
                                                         <PiClockCounterClockwise className='text-[24px]' /> {searchKeyword}
@@ -264,13 +301,14 @@ const SearchBar = ({ isFiltered }) => {
                                                 key={index}
                                                 className='px-3 py-1 m-2 border border-gray-300 text-[15px] cursor-pointer rounded-2xl'
                                                 onClick={() => {
-                                                    getRestaurantsBySearch(searchKeyword);
                                                     setQueryKeyword(searchKeyword);
                                                     setSuggestKeywordPopup(false);
                                                     handleRecentSearchKeywordAdd(searchKeyword);
                                                     setSuggestKeywordBySearchPopup(false);
-                                                    setIsOverlay(false)
-                                                    navigate('/restaurants/new')
+                                                    setIsOverlay(false);
+                                                    handleNavigate(searchKeyword);
+                                                    setHideDesktopFilterbar(true);
+                                                    setHideMainContent(true);
                                                 }}>
                                                 {searchKeyword}
                                             </button>
@@ -290,15 +328,16 @@ const SearchBar = ({ isFiltered }) => {
                                         key={index}
                                         className='w-full h-10 flex justify-between items-center cursor-pointer mt-2 px-4 hover:bg-gray-100'
                                         onClick={() => {
-                                            getRestaurantsBySearch(searchKeyword);
                                             setQueryKeyword(searchKeyword);
                                             setSuggestKeywordBySearchPopup(false);
                                             handleRecentSearchKeywordAdd(searchKeyword);
-                                            navigate('/restaurants/new')
-                                            setIsOverlay(false)
+                                            handleNavigate(searchKeyword);
+                                            setIsOverlay(false);
+                                            setHideDesktopFilterbar(true);
+                                            setHideMainContent(true)
                                         }}
                                     >
-                                        <span className='flex gap-6 items-center'><GoSearch className='text-2xl' /> {searchKeyword}</span>
+                                        <span className='flex gap-2 items-center'><GoSearch className='text-2xl' /> {searchKeyword}</span>
                                         <GoArrowUpLeft className='text-2xl' />
                                     </button>
                                 ))}

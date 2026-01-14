@@ -4,8 +4,6 @@ import { LuLocateFixed } from "react-icons/lu";
 import { CiSearch } from "react-icons/ci";
 import DotLoading from '../Loading/DotLoading/DotLoading';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { storeContext } from '../Context/Context';
 import { useLocationRestaurants } from '../Hooks/useLocationRestaurants';
 
 const Hero = () => {
@@ -19,19 +17,21 @@ const Hero = () => {
     saveAddressInLocalStorage,
     locateLocation
   } = useLocationRestaurants()
-  const { addressData, setAddressData } = useContext(storeContext)
+
   const [loading, setLoading] = useState(false)
 
+  const defaultLocation = JSON.parse(localStorage.getItem('defaultLocation'))
 
   const navigate = useNavigate()
 
 
   const handleLoading = () => {
-    setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
-      navigate(`/restaurants`)
-    }, 2000)
+    searchKey ? setLoading(true) : alert('Enter your address')
+    searchKey &&
+      setTimeout(() => {
+        setLoading(false)
+        navigate(`/restaurants/new?lat=${defaultLocation?.lat}&lng=${defaultLocation?.lon}`)
+      }, 2000)
   }
 
   return (

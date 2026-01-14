@@ -5,9 +5,10 @@ import { storeContext } from '../../Context/Context';
 import { useContext } from 'react';
 import { useLocationRestaurants } from '../../Hooks/useLocationRestaurants';
 import { restaurantService } from '../../Services/restaurant.service';
+import { useNavigate } from 'react-router-dom';
 
 const DesktopFilterbar = ({ setShowFilteredRestaurants }) => {
-    const {  filters, updateFilter, getFilteredRestaurants, clearFilter } = useContext(storeContext)
+    const { filters, updateFilter, getFilteredRestaurants, clearFilter } = useContext(storeContext)
 
 
 
@@ -38,9 +39,29 @@ const DesktopFilterbar = ({ setShowFilteredRestaurants }) => {
 
     const showClearFilterBtn = Object.values(filters).filter(f => f !== '').length;
 
+    const defaultLocation = JSON.parse(localStorage.getItem('defaultLocation'))
+    const navigate = useNavigate()
+
+    const query = Object.fromEntries(
+        Object.entries(filters).filter(
+            ([_, value]) => value !== undefined && value !== null && value !== ""
+        )
+    )
+
+    const queryString = new URLSearchParams(query).toString()
+
+    const baseUrl = `/restaurants/new?lat=${defaultLocation?.lat}&lng=${defaultLocation?.lon}`;
+
+    useEffect(() => {
+        const handleNavigate = () => {
+            navigate(queryString ? `${baseUrl}&${queryString}` : baseUrl)
+        }
+
+        handleNavigate()
+    }, [filters])
 
     return (
-        <div className='flex flex-col leftside-filter-section flex-1/4 w-74 h-[80vh] border-1 border-gray-200 px-4 overflow-y-scroll shadow-2xl mt-20'>
+        <div className='flex flex-col w-74 h-[80vh] border-1 border-gray-200 px-4 overflow-y-scroll shadow-2xl mt-20'>
 
             {/* Header */}
             <div className='w-full flex justify-between items-center py-5'>
@@ -69,7 +90,8 @@ const DesktopFilterbar = ({ setShowFilteredRestaurants }) => {
                         checked={filters.sortBy === "topRated"}
                         onClick={() => {
                             filters.sortBy === 'topRated' ? updateFilter("sortBy", "") : updateFilter("sortBy", "topRated");
-                            setShowFilteredRestaurants(true)
+                            setShowFilteredRestaurants(true);
+
                         }}
                         className='w-4.5 h-4.5 accent-black'
                     />
@@ -82,7 +104,7 @@ const DesktopFilterbar = ({ setShowFilteredRestaurants }) => {
                         checked={filters.sortBy === "distance"}
                         onClick={() => {
                             filters.sortBy === 'distance' ? updateFilter("sortBy", "") : updateFilter("sortBy", "distance");
-                            setShowFilteredRestaurants(true)
+                            setShowFilteredRestaurants(true);
 
                         }}
                         className='w-4.5 h-4.5 accent-black'
@@ -96,7 +118,8 @@ const DesktopFilterbar = ({ setShowFilteredRestaurants }) => {
                         checked={filters.sortBy === "delivery"}
                         onClick={() => {
                             filters.sortBy === 'delivery' ? updateFilter("sortBy", "") : updateFilter("sortBy", "delivery");
-                            setShowFilteredRestaurants(true)
+                            setShowFilteredRestaurants(true);
+
                         }}
                         className='w-4.5 h-4.5 accent-black'
                     />
@@ -114,7 +137,8 @@ const DesktopFilterbar = ({ setShowFilteredRestaurants }) => {
                     <button
                         onClick={() => {
                             filters.rating ? updateFilter("rating", "") : updateFilter("rating", "4");
-                            setShowFilteredRestaurants(true)
+                            setShowFilteredRestaurants(true);
+
                         }}
                         className={`${filters.rating ? 'bg-black text-white border' : ''} px-2.5 py-1 rounded-2xl cursor-pointer border border-gray-300`}>
                         Ratings 4+

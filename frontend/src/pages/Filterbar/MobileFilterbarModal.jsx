@@ -211,7 +211,7 @@ const MobileFilterbarModal = ({ setShowFilteredRestaurants, setIsFiltered }) => 
           getFilteredRestaurants();
           setIsMobileFilterbarModal(false);
           setIsFiltered(true);
-          navigate('/restaurants/new')
+          
         }} className='w-full h-14 rounded-2xl bg-orange-600 font-semibold cursor-pointer text-white'>Apply</button>
         <button onClick={() => {
           clearFilter();
