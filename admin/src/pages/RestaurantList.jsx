@@ -1,6 +1,4 @@
-import axios from 'axios'
-import React, { useContext, useEffect } from 'react'
-import { storeContext } from '../Context/RestaurantContext'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setRestaurantId, setRestaurants } from '../Services/Redux/Slices/restaurantSlice'
@@ -10,7 +8,6 @@ import { toast } from 'react-toastify'
 import { axiosInstance } from '../Api/axiosInstance'
 
 const RestaurantList = () => {
-  axios.defaults.withCredentials = true
 
 
   const navigate = useNavigate()

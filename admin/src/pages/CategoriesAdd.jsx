@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useRef, useState } from 'react'
 import { FaRegImages } from "react-icons/fa6";
 import { IoAddCircleSharp } from "react-icons/io5";
@@ -16,8 +15,6 @@ const CategoriesAdd = () => {
         status: ''
     })
 
-
-    axios.defaults.withCredentials = true;
 
 
     const imageOnchange = (e) => {
@@ -54,7 +51,7 @@ const CategoriesAdd = () => {
                 formData.append('image', image.imagePath)
             }
 
-            const response = await axiosInstance.post('/category/add', formData, { withCredentials: true })
+            const response = await axiosInstance.post('/category/add', formData)
             if (response.data.success) {
                 toast.success(response.data.message)
             } else {

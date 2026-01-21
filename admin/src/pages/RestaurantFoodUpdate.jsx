@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React from 'react'
 import { useRef } from 'react'
 import { useEffect } from 'react';
@@ -15,11 +14,7 @@ const RestaurantFoodUpdate = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCuisines, setSelectedCuisines] = useState([])
 
-  axios.defaults.withCredentials = true;
-
   const imageRef = useRef()
-
-
 
   const foodId = useSelector((state) => state.food.foodId)
 
@@ -78,7 +73,7 @@ const RestaurantFoodUpdate = () => {
         formData.append('image', updateFoodData.imagePath)
       }
       
-      const response = await axiosInstance.put(`/food/update`, formData, { withCredentials: true })
+      const response = await axiosInstance.put(`/food/update`, formData)
       
       if (response.data.success) {
         toast.success(response.data.message)

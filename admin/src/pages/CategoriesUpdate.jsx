@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { FaRegImages } from "react-icons/fa6";
 import { GrDocumentUpdate } from "react-icons/gr";
 import { useSelector } from 'react-redux';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { axiosInstance } from '../Api/axiosInstance';
 
@@ -11,13 +10,7 @@ const CategoriesUpdate = () => {
  
   const categoryId = useSelector((state) => state.categories.categoryId)
 
-
-
-  axios.defaults.withCredentials = true;
-
   const imageRef = useRef()
-
-  
 
 
   const [category, setCategory] = useState({
@@ -50,7 +43,7 @@ const CategoriesUpdate = () => {
 
     const handleEditCategory = async () => {
         try {
-            const response = await axiosInstance.post(`/category/data`, {categoryId}, {withCredentials: true});
+            const response = await axiosInstance.post(`/category/data`, {categoryId});
             setCategory(response.data.data)
         } catch (error) {
             console.log(error)
@@ -75,7 +68,7 @@ const CategoriesUpdate = () => {
         formData.append('image', updatedImage.imagePath)
       }
 
-      const response = await axiosInstance.post(`/category/update`, formData, {withCredentials: true})
+      const response = await axiosInstance.post(`/category/update`, formData)
       if(response.data.success) {
         toast.success(response.data.message)
       } else {

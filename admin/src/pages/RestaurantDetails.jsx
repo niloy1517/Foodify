@@ -5,30 +5,20 @@ import { TbBrandGoogleAnalytics } from "react-icons/tb";
 import { FiEdit } from "react-icons/fi";
 import { RiRestaurantFill } from "react-icons/ri";
 import { IoMdNotifications } from "react-icons/io";
-
-
-import axios from 'axios'
 import { useEffect } from 'react';
-
 import { useState } from 'react';
-
 import Overview from './Overview';
 import Menu from './Menu';
 import { useDispatch, useSelector } from 'react-redux';
-import { setRestaurantData } from '../Services/Redux/Slices/restaurantSlice';
 import { useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../Api/axiosInstance';
 
 
 const RestaurantDetails = () => {
-  axios.defaults.withCredentials = true;
-
-  const { locateLocation, restaurantData, setRestaurantData } = useContext(storeContext)
+  const { restaurantData, setRestaurantData } = useContext(storeContext)
   const [cuisinesArray, setCuisinesArray] = useState([])
   const [OverviewBtn, setOverviewBtn] = useState('')
   const [menuBtn, setMenuBtn] = useState('active')
-  const [orderBtn, setOrderBtn] = useState('')
-  const [settingsBtn, setSettingsBtn] = useState('')
 
   const restaurantId = useSelector((state) => state.restaurant.restaurantId)
 
@@ -37,7 +27,7 @@ const RestaurantDetails = () => {
 
   const getRestaurantData = async () => {
     try {
-      const response = await axiosInstance.get(`/restaurant/details/${restaurantId}`, { withCredentials: true })
+      const response = await axiosInstance.get(`/restaurant/details/${restaurantId}`)
       setRestaurantData(response.data.data)
       if (response.data.data) {
         setCuisinesArray(JSON.parse(response.data.data.cuisines))

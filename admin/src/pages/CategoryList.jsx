@@ -19,16 +19,12 @@ const CategoryList = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    axios.defaults.withCredentials = true;
-
-
 
     const handleDeleteCategory = async (categoryId) => {
         try {
             const response = await axiosInstance.delete(`/category/delete`, 
                 {
-                    data: {categoryId},
-                    withCredentials: true
+                    data: {categoryId}
                 })
             if(response.data.success) {
                 toast.success(response.data.message)

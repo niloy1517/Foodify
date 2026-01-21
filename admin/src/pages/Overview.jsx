@@ -2,11 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { IoIosInformationCircle } from "react-icons/io";
 import { MdLocationOn } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
-import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { axiosInstance } from '../Api/axiosInstance';
 const Overview = () => {
-    axios.defaults.withCredentials = true;
     const {id} = useParams();
     
     const [restaurant, setRestaurant] = useState('')
@@ -28,7 +26,7 @@ const Overview = () => {
 
         const restaurantData = async () => {
             try {
-            const response = await axiosInstance.post(`/restaurant/details`, {id}, {withCredentials: true})
+            const response = await axiosInstance.post(`/restaurant/details`, {id})
             setRestaurant(response.data.data)
             if(response.data.data) {
                 setCuisinesArray(JSON.parse(response.data.data.cuisines))

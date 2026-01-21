@@ -1,6 +1,4 @@
-import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react'
-
 import { GrRestaurant } from "react-icons/gr";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { FaLocationDot } from "react-icons/fa6";
@@ -15,8 +13,6 @@ import { toast } from 'react-toastify';
 import { axiosInstance } from '../Api/axiosInstance';
 
 const RestaurantAdd = () => {
-  axios.defaults.withCredentials = true;
-  
   const { restaurantData, setRestaurantData, locateLocation, resetRestaurantData } = useContext(storeContext)
   const imageRef = useRef()
   const [mapPopup, setMapPopup] = useState(false)
@@ -106,7 +102,7 @@ const RestaurantAdd = () => {
         formData.append('image', restaurantData.imagePath)
       }
 
-      const response = await axiosInstance.post('/restaurant/add', formData, { withCredentials: true });
+      const response = await axiosInstance.post('/restaurant/add', formData);
       if (response.data.success) {
         toast.success(response.data.message)
         setRestaurantData({

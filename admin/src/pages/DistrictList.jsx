@@ -1,9 +1,6 @@
 import React from 'react'
-import axios from 'axios'
-
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-
 import { FaRegEdit } from 'react-icons/fa'
 import { MdOutlineDelete } from 'react-icons/md'
 import { toast } from 'react-toastify'

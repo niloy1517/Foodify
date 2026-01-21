@@ -6,8 +6,8 @@ import { IoMdAdd } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import axios from 'axios'
-import { axiosInstance } from '../../../frontend/src/Api/axiosInstance';
+import { axiosInstance } from '../Api/axiosInstance';
+
 
 const CategoriesManage = () => {
     const navigate = useNavigate()

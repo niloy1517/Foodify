@@ -1,15 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { FaRegImages } from "react-icons/fa6";
 import Select from 'react-select';
-import { useDispatch, useSelector } from 'react-redux'
-import axios from 'axios';
+import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify';
 import { axiosInstance } from '../Api/axiosInstance';
 
 const FoodAdd = () => {
     const imageRef = useRef();
-
-    axios.defaults.withCredentials = true;
 
     const [featured, setFeatured] = useState(false);
     const [availability, setAvailability] = useState(false);
@@ -26,7 +23,6 @@ const FoodAdd = () => {
     
     const [categories, setCategories] = useState([]);
     
-    const dispatch = useDispatch()
 
     const restaurantId = useSelector((state) => state.restaurant.restaurantId)
     
@@ -104,7 +100,7 @@ const FoodAdd = () => {
                 formData.append('image', foodData.imagePath)
             }
 
-            const response = await axiosInstance.post(`/food/add`, formData, { withCredentials: true });
+            const response = await axiosInstance.post(`/food/add`, formData);
             if (response.data.success) {
                 toast.success(response.data.message);
             } else {

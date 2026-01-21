@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
@@ -61,7 +60,7 @@ const OrderEdit = () => {
         }
         console.log(payload)
         try {
-            const response = await axiosInstance.post(`/user/order/status`, payload, { withCredentials: true })
+            const response = await axiosInstance.post(`/user/order/status`, payload)
             if (response.data.success) {
                 toast.success(response.data.message)
             } else {

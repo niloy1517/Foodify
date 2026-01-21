@@ -8,8 +8,6 @@ import { axiosInstance } from '../Api/axiosInstance';
 
 const DistrictAdd = () => {
 
-    axios.defaults.withCredentials = true;
-
     const imageRef = useRef()
 
     const [districtData, setDistrictData] = useState({
@@ -19,7 +17,6 @@ const DistrictAdd = () => {
         isEnable: ''
     })
 
-    console.log(districtData)
 
     const handleOnchange = (e) => {
         setDistrictData({ ...districtData, [e.target.name]: e.target.value })
@@ -53,8 +50,7 @@ const DistrictAdd = () => {
             formData.append('image', districtData.imagePath)
         }
         try {
-            const response = await axiosInstance.post(`/district/add`, formData, { withCredentials: true })
-            console.log(response)
+            const response = await axiosInstance.post(`/district/add`, formData)
             if (response.data.success) {
                 toast.success(response.data.message)
             }

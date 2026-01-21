@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
@@ -9,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { setFoodId } from '../Services/Redux/Slices/foodSlice'
 import { toast } from 'react-toastify'
 import { axiosInstance } from '../Api/axiosInstance'
+
 const RestaurantFoodList = () => {
     const [foodList, setFoodList] = useState([])
 

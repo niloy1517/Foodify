@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify';
 import { FaRegImages } from "react-icons/fa6";
@@ -6,8 +5,6 @@ import { useSelector } from 'react-redux';
 import { axiosInstance } from '../Api/axiosInstance';
 
 const DistrictUpdate = () => {
-  
-    axios.defaults.withCredentials = true;
 
     const imageRef = useRef()
 
@@ -21,7 +18,6 @@ const DistrictUpdate = () => {
         isEnable: ''
     })
 
-    console.log(districtData)
 
     const handleOnchange = (e) => {
         setDistrictData({ ...districtData, [e.target.name]: e.target.value })
@@ -66,7 +62,7 @@ const DistrictUpdate = () => {
             formData.append('image', districtData.imagePath)
         }
         try {
-            const response = await axiosInstance.put(`/district/update`, formData, { withCredentials: true })
+            const response = await axiosInstance.put(`/district/update`, formData)
             if (response.data.success) {
                 toast.success(response.data.message)
             }

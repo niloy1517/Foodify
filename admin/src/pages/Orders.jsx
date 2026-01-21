@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { BsThreeDots } from "react-icons/bs";
 import { FaRegEye } from "react-icons/fa6";
@@ -17,7 +16,7 @@ const Orders = () => {
 
   const navigate = useNavigate()
 
-  axios.defaults.withCredentials = true;
+
 
   const getUserOrderList = async () => {
     try {
@@ -36,8 +35,7 @@ const Orders = () => {
     }
     console.log(payload)
     try {
-      const response = await axiosInstance.post(`/user/order/status`, payload, { withCredentials: true })
-      console.log(response)
+      const response = await axiosInstance.post(`/user/order/status`, payload)
     } catch (error) {
       console.log(error)
     }

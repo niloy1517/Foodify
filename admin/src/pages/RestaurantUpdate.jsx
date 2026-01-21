@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react'
 
 import { GrRestaurant } from "react-icons/gr";
@@ -13,10 +12,9 @@ import L from "leaflet";
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { axiosInstance } from '../Api/axiosInstance';
+
+
 const RestaurantUpadte = () => {
-
-
-  axios.defaults.withCredentials = true;
 
   const { locateLocation, restaurantData, setRestaurantData } = useContext(storeContext)
   
@@ -114,8 +112,8 @@ useEffect(() => {
       formData.append('restaurantId', restaurantId)
       formData.append('restaurantData', JSON.stringify(payload))
       formData.append('image', updatedImage.imagePath)
-      console.log(selectedCuisines)
-      const response = await axiosInstance.post(`/restaurant/update`, formData, { withCredentials: true })
+
+      const response = await axiosInstance.post(`/restaurant/update`, formData)
       if(response.data.success) {
         toast.success(response.data.message)
       } else {
@@ -129,7 +127,7 @@ useEffect(() => {
 
   const getRestaurantData = async () => {
     try {
-      const response = await axiosInstance.get(`/restaurant/details/${restaurantId}`, { withCredentials: true })
+      const response = await axiosInstance.get(`/restaurant/details/${restaurantId}`)
       setRestaurantData(response.data.data)
     } catch (error) {
       console.log(error)
