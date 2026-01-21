@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-    baseURL: "http://localhost:5000/api",
+    baseURL: "https://foodify-backend-8a60.onrender.com",
     withCredentials: true,
     headers: {'Content-Type': 'Application/json'}
 })
