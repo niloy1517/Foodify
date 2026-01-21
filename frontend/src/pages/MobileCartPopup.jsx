@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { TbShoppingBag } from "react-icons/tb";
 import DotLoading from '../Loading/DotLoading/DotLoading';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { axiosInstance } from '../Api/axiosInstance';
 
 const MobileCartPopup = () => {
   const carts = useSelector((state) => state.cart.carts);
@@ -28,7 +28,6 @@ const MobileCartPopup = () => {
   const [showCart, setShowCart] = useState(true)
   const [veiwCartDetails, setViewCartDetails] = useState(false)
 
-  const [activeBtn, setActiveBtn] = useState('delivery');
   const [orderData, setOrderData] = useState({});
 
 
@@ -45,7 +44,7 @@ const MobileCartPopup = () => {
 
   const getOrderData = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/user/order/list/${userData?._id}`)
+      const response = await axiosInstance.get(`/user/order/list/${userData?._id}`)
       const runingOrder = response?.data?.data.find(ord => ord.paymentStatus === 'Paid' && ord.orderStatus !== 'Completed')
       setOrderData(runingOrder)
     } catch (error) {

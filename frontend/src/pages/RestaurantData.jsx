@@ -13,7 +13,7 @@ const RestaurantData = () => {
                 <p>{restaurant.name}</p>
             </div>
             <div className='px-10 pt-4 flex items-center space-x-6 border-b border-gray-400 pb-5'>
-                <img className='w-40 h-40 rounded-2xl' src={`http://localhost:5000/images/${restaurant.image}`} alt="" />
+                <img className='w-40 h-40 rounded-2xl' src={`${import.meta.env.VITE_IMAGE_BASE_URL}/images/${restaurant.image}`} alt="" />
                 <div className='flex flex-col space-y-2'>
                     <p className='font-bold text-3xl pb-3'>{restaurant.name}</p>
                     <div className='flex space-x-6'>

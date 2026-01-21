@@ -26,7 +26,7 @@ const RestaurantCard = ({ restaurant, from, canDeliver }) => {
     }}
       className={`w-full h-[380px] lg:h-[300px] xl:h-[280px] ${from === 'swiperJsx' && 'max-h-[250px]'} border border-gray-200 cursor-pointer rounded-[10px] overflow-hidden`}>
       <div className={`relative w-full h-[74%] lg:h-[68%] xl:h-[65%] ${from === 'swiperJsx' && 'max-h-[160px]'} overflow-hidden hover:scale-105 transition transform duration-200`}>
-        <img className='relative w-full h-full' src={`http://localhost:5000/images/${restaurant.image}`} alt={restaurant.name} />
+        <img className='relative w-full h-full' src={`${import.meta.env.VITE_IMAGE_BASE_URL}/images/${restaurant.image}`} alt={restaurant.name} />
         {
           canDeliver === false && (
             <p className='absolute inset-0 bg-black/60 z-10 flex items-center justify-center text-2xl font-semibold text-white '>Currently unavailable</p>

@@ -15,7 +15,7 @@ const DeliveryItems = () => {
             <div className='w-full lg:w-[400px] h-auto py-2 lg:py-6 lg:shadow px-4 lg:px-6 bg-white'>
                 <p className='text-2xl xl:text-[30px] font-bold text-gray-800 pb-2 xl:pb-4'>Your order from</p>
                 <div className='flex items-center space-x-3 xl:text-2xl font-medium'>
-                    <img className='hidden xl:block w-25 h-20 rounded-2xl' src={`http://localhost:5000/images/${restaurantData?.image}`} alt="" />
+                    <img className='hidden xl:block w-25 h-20 rounded-2xl' src={`${import.meta.env.VITE_IMAGE_BASE_URL}/images/${restaurantData?.image}`} alt="" />
                     <>{restaurantData?.restaurantName}</>
                 </div>
                 <div className='flex flex-col gap-3 border-b border-gray-200 pb-3 text-[18px] pt-8'>

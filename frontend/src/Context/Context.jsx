@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { restaurantService } from '../Services/restaurant.service'
+import { axiosInstance } from '../Api/axiosInstance'
 
 
 export const storeContext = createContext(null)
@@ -129,8 +130,8 @@ const Context = ({ children }) => {
 
 
     try {
-      const response = await axios.get(
-        `http://localhost:5000/api/restaurant/search?${query.toString()}`
+      const response = await axiosInstance.get(
+        `/restaurant/search?${query.toString()}`
       );
 
       if (response.data.message) {

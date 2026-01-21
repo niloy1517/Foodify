@@ -61,7 +61,7 @@ const RestaurantFindByCategory = () => {
         {
           restaurants?.map(restaurant => (
             <div onClick={() => { dispatch(setRestaurantId(restaurant._id)), handleNavigate(restaurant.restaurantName) }} key={restaurant._id} className='w-78 h-66 shrink-0 bg-gray-50 border border-gray-300 rounded-2xl overflow-hidden cursor-pointer'>
-              <img className='w-full h-40 hover:scale-105 transition transform duration-200' src={`http://localhost:5000/images/${restaurant.image}`} alt={restaurant.name} />
+              <img className='w-full h-40 hover:scale-105 transition transform duration-200' src={`${import.meta.env.VITE_IMAGE_BASE_URL}/images/${restaurant.image}`} alt={restaurant.name} />
               <div className='flex justify-between px-2 font-semibold'>
                 <p className='text-[20px] font-semibold py-1'>{restaurant.restaurantName}</p>
                 <div className='flex items-center text-sm text-gray-700'>

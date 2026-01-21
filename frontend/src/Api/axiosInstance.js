@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-    baseURL: "https://foodify-backend-8a60.onrender.com/api",
+    baseURL: import.meta.env.VITE_API_BASE_URL,
     withCredentials: true,
-    headers: {'Content-Type': 'Application/json'}
+    headers: {'Content-Type': 'application/json'}
 })

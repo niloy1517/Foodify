@@ -86,7 +86,7 @@ const MenuCategory = () => {
                         >
                             <img
                                 className="w-full h-[140px] rounded-2xl hover:scale-105 transition"
-                                src={`http://localhost:5000/images/${cate.image}`}
+                                src={`${import.meta.env.VITE_IMAGE_BASE_URL}/images/${cate.image}`}
                                 alt=""
                             />
                             <span className="font-medium">{cate.name}</span>

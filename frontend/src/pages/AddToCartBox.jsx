@@ -59,7 +59,7 @@ const AddToCartBox = () => {
               <div className='h-[380px] flex flex-col gap-4 overflow-y-auto'>
                 {items.map(item => (
                   <div key={item._id} className='flex items-center px-2'>
-                    <img className='size-20 rounded-[10px]' src={`http://localhost:5000/images/${item.image}`} alt="" />
+                    <img className='size-20 rounded-[10px]' src={`${import.meta.env.VITE_IMAGE_BASE_URL}/images/${item.image}`} alt="" />
                     <div className='w-full flex flex-col gap-3 px-4'>
                       <p className='text-[20px] font-medium text-gray-700'>{item.foodName}</p>
                       <div className='w-full flex items-center justify-between'>
