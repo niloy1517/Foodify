@@ -256,7 +256,7 @@ const RestaurantAdd = () => {
             </div>
             <div className='flex flex-col flex-1'>
               <label htmlFor="district" className='text-[18px] font-medium text-gray-700'>District</label>
-              <select name="district" id="district" onChange={handleOnchange} className='h-14 px-4 py-2 outline-0 border border-gray-300 hover:border-orange-600'onChange={handleOnchange} className='h-14 px-4 py-2 outline-0 border border-gray-300 hover:border-orange-600'>
+              <select name="district" id="district" onChange={handleOnchange} className='h-14 px-4 py-2 outline-0 border border-gray-300 hover:border-orange-600'>
                 <option value="" className='hidden'>Select</option>
                 {
                   districts.map(district => (
@@ -267,7 +267,7 @@ const RestaurantAdd = () => {
             </div>
             <div className='flex gap-10 items-center'>
               <button onClick={locateLocation} className='flex items-center gap-1.5 rounded px-4 py-2 bg-orange-600 text-white cursor-pointer'><LuLocateFixed className='text-2xl' /> Use My Location</button>
-              <button onClick={() => setMapPopup(true)} className='px-4 py-[8px] rounded bg-gray-700 text-white'>Choice From Map</button>
+              <button onClick={() => setMapPopup(true)} className='px-4 py-2 rounded bg-gray-700 text-white'>Choice From Map</button>
             </div>
           </div>
         </div>
@@ -348,9 +348,9 @@ const RestaurantAdd = () => {
           {mapPopup &&
 
             <div>
-              <button onClick={() => setMapPopup(false)} className='ml-[95%] mt-[-8px] mb-2 text-4xl font-medium cursor-pointer'>x</button>
+              <button onClick={() => setMapPopup(false)} className='ml-[95%] mt-2 mb-2 text-4xl font-medium cursor-pointer'>x</button>
 
-              <MapContainer center={[23.8103, 90.4125]} zoom={13} className="w-[100%] h-96 relative z-0">
+              <MapContainer center={[23.8103, 90.4125]} zoom={13} className="w-full h-96 relative z-0">
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 <Marker position={[restaurantData.latitude || 23.8103, restaurantData.longitude || 90.4125]} />
                 <MapEventHandeler />
