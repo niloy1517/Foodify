@@ -223,7 +223,7 @@ useEffect(() => {
               <input ref={imageRef} type="file" name="image" id="image" onChange={handleImageOnchange} className='hidden' />
               {
                 restaurantData.image ? (
-                  <img className='w-full h-full' src={updatedImage.image || `http://localhost:5000/images/${restaurantData.image}`} alt="" />
+                  <img className='w-full h-full' src={updatedImage.image || `${import.meta.env.VITE_IMAGE_BASE_URL}/images/${restaurantData.image}`} alt="" />
                 ) :
                   (
                     <div className='flex flex-col items-center justify-center'>
@@ -275,7 +275,7 @@ useEffect(() => {
             </div>
             <div className='flex gap-10 items-center'>
               <button onClick={locateLocation} className='flex items-center gap-1.5 rounded px-4 py-2 bg-orange-600 text-white cursor-pointer'><LuLocateFixed className='text-2xl' /> Use My Location</button>
-              <button onClick={() => setMapPopup(true)} className='px-4 py-[8px] rounded bg-gray-700 text-white'>Choice From Map</button>
+              <button onClick={() => setMapPopup(true)} className='px-4 py-2 rounded bg-gray-700 text-white'>Choice From Map</button>
             </div>
           </div>
         </div>
@@ -355,9 +355,9 @@ useEffect(() => {
           {mapPopup &&
 
             <div>
-              <button onClick={() => setMapPopup(false)} className='ml-[95%] mt-[-8px] mb-2 text-4xl font-medium cursor-pointer'>x</button>
+              <button onClick={() => setMapPopup(false)} className='ml-[95%] mt-2 mb-2 text-4xl font-medium cursor-pointer'>x</button>
 
-              <MapContainer center={[23.8103, 90.4125]} zoom={13} className="w-[100%] h-96 relative z-0">
+              <MapContainer center={[23.8103, 90.4125]} zoom={13} className="w-full h-96 relative z-0">
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 <Marker position={[restaurantData.latitude || 23.8103, restaurantData.longitude || 90.4125]} />
                 <MapEventHandeler />

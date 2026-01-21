@@ -84,19 +84,19 @@ const RestaurantDetails = () => {
           <button className='flex items-center gap-1 cursor-pointer px-6 py-2.5 rounded text-white bg-pink-500 hover:bg-pink-600'><IoMdNotifications className='text-2xl' /> <span>Notifications</span></button>
         </div>
         <div className='flex gap-8 flex-wrap text-[18px] font-medium text-gray-700'>
-          <div className='w-60 h-40 bg-white rounded-[10px] flex flex-col items-center justify-center shadow hover:mt-[-10px] transition-normal duration-300 ease-in'>
+          <div className='w-60 h-40 bg-white rounded-[10px] flex flex-col items-center justify-center shadow hover:mt-2 transition-normal duration-300 ease-in'>
             <p className='text-4xl font-medium text-pink-600'>124</p>
             <p>Total orders</p>
           </div>
-          <div className='w-60 h-40 bg-white rounded-[10px] flex flex-col items-center justify-center shadow hover:mt-[-10px] transition-normal duration-300 ease-in'>
+          <div className='w-60 h-40 bg-white rounded-[10px] flex flex-col items-center justify-center shadow hover:mt-2 transition-normal duration-300 ease-in'>
             <p className='text-4xl font-medium text-green-600'>50,000</p>
             <p>Total Revenue</p>
           </div>
-          <div className='w-60 h-40 bg-white rounded-[10px] flex flex-col items-center justify-center shadow hover:mt-[-10px] transition-normal duration-300 ease-in'>
+          <div className='w-60 h-40 bg-white rounded-[10px] flex flex-col items-center justify-center shadow hover:mt-2 transition-normal duration-300 ease-in'>
             <p className='text-4xl font-medium text-amber-600'>4.5</p>
             <p>Average Rating</p>
           </div>
-          <div className='w-60 h-40 bg-white -[10px] flex flex-col items-center justify-center shadow hover:mt-[-10px] transition-normal duration-300 ease-in'>
+          <div className='w-60 h-40 bg-white -[10px] flex flex-col items-center justify-center shadow hover:mt-2 transition-normal duration-300 ease-in'>
             <p className='text-4xl font-medium text-sky-600'>87%</p>
             <p>Completion Rate</p>
           </div>

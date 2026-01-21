@@ -43,7 +43,7 @@ const RestaurantList = () => {
 
   const getRestaurantList = async () => {
     try {
-      const response = await axiosInstance.get('/api/restaurant/list')
+      const response = await axiosInstance.get('/restaurant/list')
       if (response.data.success) {
         dispatch(setRestaurants(response.data.data))
       }

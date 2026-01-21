@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { createContext, useEffect, useState } from 'react'
+import { axiosInstance } from '../Api/axiosInstance'
 
 export const storeContext = createContext(null)
 
@@ -38,7 +39,7 @@ const RestaurantContext = ({ children }) => {
 
   const getRestaurantList = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/restaurant/list', {}, { withCredentials: true })
+      const response = await axiosInstance.get('/restaurant/list', {}, { withCredentials: true })
       setRestaurantList(response.data.data)
     } catch (error) {
       console.log(error)
@@ -47,7 +48,7 @@ const RestaurantContext = ({ children }) => {
 
   const deleteRestaurant = async (restaurantId) => {
     try {
-      const response = await axios.delete('http://localhost:5000/api/restaurant/delete', {
+      const response = await axiosInstance.delete('/restaurant/delete', {
         data: { restaurantId },
         withCredentials: true
       })
