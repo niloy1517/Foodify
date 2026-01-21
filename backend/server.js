@@ -33,6 +33,7 @@ const allowedOrigins = [
     'http://localhost:5174',
     'http://localhost:5000',
     process.env.FRONTEND_URL,
+    process.env.ADMIN_URL,
 ];
 
 app.use(cors({
