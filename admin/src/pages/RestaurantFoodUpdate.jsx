@@ -7,6 +7,7 @@ import { FaRegImages } from "react-icons/fa6";
 import { useSelector } from 'react-redux';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
+import { axiosInstance } from '../Api/axiosInstance';
 
 
 const RestaurantFoodUpdate = () => {
@@ -77,7 +78,7 @@ const RestaurantFoodUpdate = () => {
         formData.append('image', updateFoodData.imagePath)
       }
       
-      const response = await axios.put(`http://localhost:5000/api/food/update`, formData, { withCredentials: true })
+      const response = await axiosInstance.put(`/food/update`, formData, { withCredentials: true })
       
       if (response.data.success) {
         toast.success(response.data.message)
@@ -91,7 +92,7 @@ const RestaurantFoodUpdate = () => {
 
   const handleCategoryList = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/category/list`)
+      const response = await axiosInstance.get(`/category/list`)
       setCategories(response.data.data)
     } catch (error) {
       console.log(error)
@@ -102,7 +103,7 @@ const RestaurantFoodUpdate = () => {
 
   const getFoodItem = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/food/item/${foodId}`)
+      const response = await axiosInstance.get(`/food/item/${foodId}`)
       setUpdateFoodData(response.data.data)
       setSelectedCuisines(JSON.parse(response.data.data.cuisines))
     } catch (error) {
@@ -142,7 +143,7 @@ const RestaurantFoodUpdate = () => {
                 <input ref={imageRef} type="file" name="image" id="image" onChange={imageOnchange} className='hidden' />
                 {
                   updateFoodData.image ?
-                    <img className='w-full h-full' src={updateFoodData.imagePath ? updateFoodData.image : `http://localhost:5000/images/${updateFoodData.image}`} alt="" />
+                    <img className='w-full h-full' src={updateFoodData.imagePath ? updateFoodData.image : `${import.meta.env.VITE_IMAGE_BASE_URL}/images/${updateFoodData.image}`} alt="" />
                     :
                     <div>
                       <FaRegImages className='text-7xl text-gray-300' />

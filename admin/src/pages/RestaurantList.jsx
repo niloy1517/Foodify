@@ -7,6 +7,7 @@ import { setRestaurantId, setRestaurants } from '../Services/Redux/Slices/restau
 import { FaRegEdit } from 'react-icons/fa'
 import { MdOutlineDelete } from 'react-icons/md'
 import { toast } from 'react-toastify'
+import { axiosInstance } from '../Api/axiosInstance'
 
 const RestaurantList = () => {
   axios.defaults.withCredentials = true
@@ -29,7 +30,7 @@ const RestaurantList = () => {
 
   const deleteRestaurant = async (restaurantId) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/api/restaurant/delete/${restaurantId}`)
+      const response = await axiosInstance.delete(`/restaurant/delete/${restaurantId}`)
       if(response.data.success) {
         toast.success(response.data.message)
       } else {
@@ -42,7 +43,7 @@ const RestaurantList = () => {
 
   const getRestaurantList = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/restaurant/list')
+      const response = await axiosInstance.get('/api/restaurant/list')
       if (response.data.success) {
         dispatch(setRestaurants(response.data.data))
       }
@@ -73,7 +74,7 @@ const RestaurantList = () => {
                 <td className="px-4 py-2">
                   <img
                     className="w-24 h-16 object-cover rounded"
-                    src={`http://localhost:5000/images/${restaurant.image}`}
+                    src={`${import.meta.env.VITE_IMAGE_BASE_URL}/images/${restaurant.image}`}
                     alt={restaurant.restaurantName}
                   />
                 </td>

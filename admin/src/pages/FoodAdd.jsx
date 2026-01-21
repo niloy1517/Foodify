@@ -4,6 +4,7 @@ import Select from 'react-select';
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { axiosInstance } from '../Api/axiosInstance';
 
 const FoodAdd = () => {
     const imageRef = useRef();
@@ -75,7 +76,7 @@ const FoodAdd = () => {
 
     const handleCategoryList = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/category/list`)
+            const response = await axiosInstance.get(`/category/list`)
             setCategories(response.data.data)
         } catch (error) {
             console.log(error)
@@ -103,7 +104,7 @@ const FoodAdd = () => {
                 formData.append('image', foodData.imagePath)
             }
 
-            const response = await axios.post(`http://localhost:5000/api/food/add`, formData, { withCredentials: true });
+            const response = await axiosInstance.post(`/food/add`, formData, { withCredentials: true });
             if (response.data.success) {
                 toast.success(response.data.message);
             } else {

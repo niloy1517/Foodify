@@ -8,6 +8,7 @@ import { MdOutlineDelete } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 import { setFoodId } from '../Services/Redux/Slices/foodSlice'
 import { toast } from 'react-toastify'
+import { axiosInstance } from '../Api/axiosInstance'
 const RestaurantFoodList = () => {
     const [foodList, setFoodList] = useState([])
 
@@ -18,7 +19,7 @@ const RestaurantFoodList = () => {
 
     const getRestaurantFoodList = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/food/list/${restaurantId}`)
+            const response = await axiosInstance.get(`/food/list/${restaurantId}`)
             setFoodList(response.data.foods)
         } catch (error) {
             console.log(error)
@@ -28,7 +29,7 @@ const RestaurantFoodList = () => {
 
     const deleteRestaurantFoodItem = async (foodId) => {
         try {
-            const response = await axios.delete(`http://localhost:5000/api/food/delete/${foodId}`)
+            const response = await axiosInstance.delete(`/food/delete/${foodId}`)
 
             if (response.data.success) {
                 toast.success(response.data.message)
@@ -64,7 +65,7 @@ const RestaurantFoodList = () => {
                                 <td className="px-4 py-2">
                                     <img
                                         className="w-24 h-16 object-cover rounded"
-                                        src={`http://localhost:5000/images/${food.image}`}
+                                        src={`${import.meta.env.VITE_IMAGE_BASE_URL}/images/${food.image}`}
                                         alt={food.foodName}
                                     />
                                 </td>

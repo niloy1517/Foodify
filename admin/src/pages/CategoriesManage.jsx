@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import axios from 'axios'
+import { axiosInstance } from '../../../frontend/src/Api/axiosInstance';
 
 const CategoriesManage = () => {
     const navigate = useNavigate()
@@ -18,7 +19,7 @@ const CategoriesManage = () => {
 
     const categoryList = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/category/list`)
+            const response = await axiosInstance.get(`/category/list`)
             setCategories(response.data.data)
         } catch (error) {
             console.log(error)

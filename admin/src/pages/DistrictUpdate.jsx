@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify';
 import { FaRegImages } from "react-icons/fa6";
 import { useSelector } from 'react-redux';
+import { axiosInstance } from '../Api/axiosInstance';
 
 const DistrictUpdate = () => {
   
@@ -44,7 +45,7 @@ const DistrictUpdate = () => {
 
     const getDistrictData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/district/data/${districtId}`)
+        const response = await axiosInstance.get(`/district/data/${districtId}`)
         setDistrictData(response.data.data)
       } catch (error) {
         console.log(error)
@@ -65,8 +66,7 @@ const DistrictUpdate = () => {
             formData.append('image', districtData.imagePath)
         }
         try {
-            const response = await axios.put(`http://localhost:5000/api/district/update`, formData, { withCredentials: true })
-            console.log(response)
+            const response = await axiosInstance.put(`/district/update`, formData, { withCredentials: true })
             if (response.data.success) {
                 toast.success(response.data.message)
             }
@@ -95,7 +95,7 @@ const DistrictUpdate = () => {
 
                         {
                             districtData.image ?
-                                <img src={districtData.imagePath ? districtData.image : `http://localhost:5000/images/${districtData.image}`} alt={districtData.name} className='w-full h-full' /> :
+                                <img src={districtData.imagePath ? districtData.image : `${import.meta.env.VITE_IMAGE_BASE_URL}/images/${districtData.image}`} alt={districtData.name} className='w-full h-full' /> :
                                 <div className='flex flex-col gap-2 items-center justify-center'>
                                     <FaRegImages className='text-5xl' />
                                     <p>Upload Image</p>

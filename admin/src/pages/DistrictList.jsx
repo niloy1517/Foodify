@@ -10,6 +10,7 @@ import { toast } from 'react-toastify'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { setDistrictId } from '../Services/Redux/Slices/districtSlice'
+import { axiosInstance } from '../Api/axiosInstance'
 
 
 
@@ -24,7 +25,7 @@ const DistrictList = () => {
 
   const getDistrictList = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/district/list`)
+      const response = await axiosInstance.get(`/district/list`)
       setDistricts(response.data.data)
     } catch (error) {
       console.log(error)
@@ -33,7 +34,7 @@ const DistrictList = () => {
 
   const deleteDistrict = async (districtId) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/api/district/delete/${districtId}`)
+      const response = await axiosInstance.delete(`/district/delete/${districtId}`)
       if (response.data.success) {
         toast.success(response.data.message)
       } else {
@@ -66,7 +67,7 @@ const DistrictList = () => {
                 <td className="px-4 py-2">
                   <img
                     className="w-24 h-16 object-cover rounded"
-                    src={`http://localhost:5000/images/${district.image}`}
+                    src={`${import.meta.env.VITE_IMAGE_BASE_URL}/images/${district.image}`}
                     alt={district.name}
                   />
                 </td>

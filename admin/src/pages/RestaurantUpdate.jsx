@@ -12,6 +12,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { axiosInstance } from '../Api/axiosInstance';
 const RestaurantUpadte = () => {
 
 
@@ -114,7 +115,7 @@ useEffect(() => {
       formData.append('restaurantData', JSON.stringify(payload))
       formData.append('image', updatedImage.imagePath)
       console.log(selectedCuisines)
-      const response = await axios.post(`http://localhost:5000/api/restaurant/update`, formData, { withCredentials: true })
+      const response = await axiosInstance.post(`/restaurant/update`, formData, { withCredentials: true })
       if(response.data.success) {
         toast.success(response.data.message)
       } else {
@@ -128,7 +129,7 @@ useEffect(() => {
 
   const getRestaurantData = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/restaurant/details/${restaurantId}`, { withCredentials: true })
+      const response = await axiosInstance.get(`/restaurant/details/${restaurantId}`, { withCredentials: true })
       setRestaurantData(response.data.data)
     } catch (error) {
       console.log(error)

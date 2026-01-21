@@ -17,6 +17,7 @@ import Menu from './Menu';
 import { useDispatch, useSelector } from 'react-redux';
 import { setRestaurantData } from '../Services/Redux/Slices/restaurantSlice';
 import { useNavigate } from 'react-router-dom';
+import { axiosInstance } from '../Api/axiosInstance';
 
 
 const RestaurantDetails = () => {
@@ -36,7 +37,7 @@ const RestaurantDetails = () => {
 
   const getRestaurantData = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/restaurant/details/${restaurantId}`, { withCredentials: true })
+      const response = await axiosInstance.get(`/restaurant/details/${restaurantId}`, { withCredentials: true })
       setRestaurantData(response.data.data)
       if (response.data.data) {
         setCuisinesArray(JSON.parse(response.data.data.cuisines))
@@ -57,7 +58,7 @@ const RestaurantDetails = () => {
       <p className='text-3xl font-medium text-gray-700 border-b border-gray-200 pb-1'>Restaurant Details</p>
       <div className='mt-8 flex flex-col gap-20'>
         <div className='w-[400px] flex flex-col shadow'>
-          <img className='w-[94%] flex pt-2 mx-auto' src={`http://localhost:5000/images/${restaurantData.image}`} alt="" />
+          <img className='w-[94%] flex pt-2 mx-auto' src={`${import.meta.env.VITE_IMAGE_BASE_URL}/images/${restaurantData.image}`} alt="" />
           <div className='px-4 py-2'>
             <div className=''>
               <p className='text-[28px] font-medium text-gray-700 pb-2'>{restaurantData.restaurantName}</p>

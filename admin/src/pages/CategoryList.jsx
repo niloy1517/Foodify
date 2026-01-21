@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch} from 'react-redux';
 import { categoryData, categoryId } from '../Services/Redux/Slices/categorySlice';
 import { toast } from 'react-toastify';
+import { axiosInstance } from '../Api/axiosInstance';
 
 const CategoryList = () => {
     const tableHeader = [
@@ -24,7 +25,7 @@ const CategoryList = () => {
 
     const handleDeleteCategory = async (categoryId) => {
         try {
-            const response = await axios.delete(`http://localhost:5000/api/category/delete`, 
+            const response = await axiosInstance.delete(`/category/delete`, 
                 {
                     data: {categoryId},
                     withCredentials: true
@@ -42,7 +43,7 @@ const CategoryList = () => {
 
     const handleCategoryList = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/category/list`)
+            const response = await axiosInstance.get(`/category/list`)
             setCategories(response.data.data)
         } catch (error) {
             console.log(error)
@@ -74,7 +75,7 @@ const CategoryList = () => {
                     <td className="px-4 py-2">
                     <img
                         className="w-24 h-16 object-cover rounded"
-                        src={`http://localhost:5000/images/${item.image}`}
+                        src={`${import.meta.env.VITE_IMAGE_BASE_URL}/images/${item.image}`}
                         alt={item.name}
                     />
                     </td>

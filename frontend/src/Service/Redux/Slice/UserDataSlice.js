@@ -1,17 +1,17 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   userData: [],
   newDeliveryAddress: {
-    house: "",
-    apartment: "",
-    riderNote: "",
-    label: "",
+    house: '',
+    apartment: '',
+    riderNote: '',
+    label: ''
   },
-};
+}
 
 export const userDataSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {
     setUserData: (state, action) => {
@@ -20,8 +20,10 @@ export const userDataSlice = createSlice({
     setNewDeliveryAddress: (state, action) => {
       state.newDeliveryAddress = action.payload;
     },
-  },
-});
+  }
+})
 
-export const { setUserData, setNewDeliveryAddress } = userDataSlice.actions;
-export default userDataSlice.reducer;
+
+export const { setUserData, setNewDeliveryAddress } = userDataSlice.actions
+
+export default userDataSlice.reducer

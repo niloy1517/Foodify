@@ -4,6 +4,7 @@ import { GrDocumentUpdate } from "react-icons/gr";
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { axiosInstance } from '../Api/axiosInstance';
 
 const CategoriesUpdate = () => {
   const [updatedImage, setUpdatedImage] = useState('')
@@ -49,7 +50,7 @@ const CategoriesUpdate = () => {
 
     const handleEditCategory = async () => {
         try {
-            const response = await axios.post(`http://localhost:5000/api/category/data`, {categoryId}, {withCredentials: true});
+            const response = await axiosInstance.post(`/category/data`, {categoryId}, {withCredentials: true});
             setCategory(response.data.data)
         } catch (error) {
             console.log(error)
@@ -74,7 +75,7 @@ const CategoriesUpdate = () => {
         formData.append('image', updatedImage.imagePath)
       }
 
-      const response = await axios.post(`http://localhost:5000/api/category/update`, formData, {withCredentials: true})
+      const response = await axiosInstance.post(`/category/update`, formData, {withCredentials: true})
       if(response.data.success) {
         toast.success(response.data.message)
       } else {

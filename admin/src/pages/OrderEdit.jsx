@@ -9,6 +9,7 @@ import { GiGymBag } from "react-icons/gi";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdAccountCircle } from "react-icons/md";
 import { toast, ToastContainer } from 'react-toastify'
+import { axiosInstance } from '../Api/axiosInstance'
 
 
 
@@ -43,7 +44,7 @@ const OrderEdit = () => {
 
     const getOrderDetails = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/user/order/details/${id}`)
+            const response = await axiosInstance.get(`/user/order/details/${id}`)
             setOrderDetails(response.data.data)
             setUpdateOrderData(response.data.data)
             setDelivery(response.data.data.delivery)
@@ -60,7 +61,7 @@ const OrderEdit = () => {
         }
         console.log(payload)
         try {
-            const response = await axios.post(`http://localhost:5000/api/user/order/status`, payload, { withCredentials: true })
+            const response = await axiosInstance.post(`/user/order/status`, payload, { withCredentials: true })
             if (response.data.success) {
                 toast.success(response.data.message)
             } else {

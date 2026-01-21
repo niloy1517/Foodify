@@ -3,6 +3,7 @@ import React, { useRef, useState } from 'react'
 import { FaRegImages } from "react-icons/fa6";
 import { IoAddCircleSharp } from "react-icons/io5";
 import { toast, ToastContainer } from 'react-toastify'
+import { axiosInstance } from '../Api/axiosInstance';
 
 const CategoriesAdd = () => {
     const imageRef = useRef()
@@ -53,7 +54,7 @@ const CategoriesAdd = () => {
                 formData.append('image', image.imagePath)
             }
 
-            const response = await axios.post(`http://localhost:5000/api/category/add`, formData, { withCredentials: true })
+            const response = await axiosInstance.post('/category/add', formData, { withCredentials: true })
             if (response.data.success) {
                 toast.success(response.data.message)
             } else {

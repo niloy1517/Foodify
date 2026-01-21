@@ -10,6 +10,7 @@ const DesktopNavbar = () => {
     const { setShowAuthenticationPopup, setLoginPopup, setIsLoginPage, setFindFoodByLocationPopup, setUserCartModal, isOverlay, setIsOverlay, isDropdownMenu, setIsDropdownMenu } = useContext(storeContext)
 
     const userData = useSelector((state) => state.user.userData)
+    console.log('userAData', userData)
     const allRestaurantData = useSelector((state) => state.cart.allRestaurantData);
 
     //Get location from localStorage

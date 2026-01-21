@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { axiosInstance } from '../Api/axiosInstance'
 
 const orderDetails = () => {
     const { id } = useParams()
@@ -10,7 +11,7 @@ const orderDetails = () => {
 
     const getOrderDetails = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/user/order/details/${id}`)
+            const response = await axiosInstance.get(`/user/order/details/${id}`)
             setOrderDetails(response.data.data)
         } catch (error) {
             console.log(error)

@@ -34,7 +34,7 @@ const AvailableDistricts = () => {
                         <div key={index} className=''>
                             {district.isEnable === 'active' &&
                                 <div key={index}>
-                                    <img className='w-full h-[280px] rounded-2xl' src={`${import.meta.env.VITE_IMAGE_BASE_URL}images/${district.image}`} alt="" />
+                                    <img className='w-full h-[280px] rounded-2xl' src={`${import.meta.env.VITE_IMAGE_BASE_URL}/images/${district.image}`} alt="" />
                                     <button onClick={() => { dispatch(setDistrictId(district._id)), navigate('/restaurants/district') }} className='bg-white text-black w-34 h-9 rounded-[10px] font-bold absolute mt-[-50px] ml-10 cursor-pointer hover:bg-orange-100'>{district.name}</button>
                                 </div>
                             }

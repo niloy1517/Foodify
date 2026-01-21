@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRef } from 'react';
 import { FaRegImages } from "react-icons/fa6";
 import { toast } from 'react-toastify';
+import { axiosInstance } from '../Api/axiosInstance';
 
 const DistrictAdd = () => {
 
@@ -52,7 +53,7 @@ const DistrictAdd = () => {
             formData.append('image', districtData.imagePath)
         }
         try {
-            const response = await axios.post(`http://localhost:5000/api/district/add`, formData, { withCredentials: true })
+            const response = await axiosInstance.post(`/district/add`, formData, { withCredentials: true })
             console.log(response)
             if (response.data.success) {
                 toast.success(response.data.message)

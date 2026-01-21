@@ -6,6 +6,7 @@ import { FiEdit } from "react-icons/fi";
 
 import { IoIosCheckmarkCircleOutline, IoIosCloseCircleOutline } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
+import { axiosInstance } from '../Api/axiosInstance';
 
 const Orders = () => {
   const tableHearder = ['Order ID', 'Customer', 'Restaurant', 'Items', 'Total', 'Status', 'Order Time', 'Action']
@@ -20,7 +21,7 @@ const Orders = () => {
 
   const getUserOrderList = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/user/order/list`)
+      const response = await axiosInstance.get(`/user/order/list`)
       setOrderList(response.data.data.reverse())
     } catch (error) {
       console.log(error)
@@ -35,7 +36,7 @@ const Orders = () => {
     }
     console.log(payload)
     try {
-      const response = await axios.post(`http://localhost:5000/api/user/order/status`, payload, { withCredentials: true })
+      const response = await axiosInstance.post(`/user/order/status`, payload, { withCredentials: true })
       console.log(response)
     } catch (error) {
       console.log(error)

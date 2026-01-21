@@ -4,6 +4,7 @@ import { MdLocationOn } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { axiosInstance } from '../Api/axiosInstance';
 const Overview = () => {
     axios.defaults.withCredentials = true;
     const {id} = useParams();
@@ -27,7 +28,7 @@ const Overview = () => {
 
         const restaurantData = async () => {
             try {
-            const response = await axios.post(`http://localhost:5000/api/restaurant/details`, {id}, {withCredentials: true})
+            const response = await axiosInstance.post(`/restaurant/details`, {id}, {withCredentials: true})
             setRestaurant(response.data.data)
             if(response.data.data) {
                 setCuisinesArray(JSON.parse(response.data.data.cuisines))

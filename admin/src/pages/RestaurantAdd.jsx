@@ -12,6 +12,7 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { toast } from 'react-toastify';
+import { axiosInstance } from '../Api/axiosInstance';
 
 const RestaurantAdd = () => {
   axios.defaults.withCredentials = true;
@@ -74,7 +75,7 @@ const RestaurantAdd = () => {
 
   const getDistrictsList = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/district/list`)
+      const response = await axiosInstance.get('/district/list')
       setDistricts(response.data.data)
     } catch (error) {
       console.log(error)
@@ -105,7 +106,7 @@ const RestaurantAdd = () => {
         formData.append('image', restaurantData.imagePath)
       }
 
-      const response = await axios.post('http://localhost:5000/api/restaurant/add', formData, { withCredentials: true });
+      const response = await axiosInstance.post('/restaurant/add', formData, { withCredentials: true });
       if (response.data.success) {
         toast.success(response.data.message)
         setRestaurantData({
