@@ -75,7 +75,7 @@ const RestaurantAdd = () => {
 
   const getDistrictsList = async () => {
     try {
-      const response = await axiosInstance.get('/district/list')
+      const response = await axiosInstance.get(`/district/list`)
       setDistricts(response.data.data)
     } catch (error) {
       console.log(error)

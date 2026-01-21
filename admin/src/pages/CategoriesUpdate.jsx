@@ -115,7 +115,7 @@ const CategoriesUpdate = () => {
                     <input ref={imageRef} type="file" name="image" id="image" onChange={imageOnchange} className='hidden' />
                     {
                         category.image ? (
-                            <img className='w-full h-full' src={updatedImage.image || `http://localhost:5000/images/${category.image}`} alt="" />
+                            <img className='w-full h-full' src={updatedImage.image || `${import.meta.env.VITE_IMAGE_BASE_URL}/images/${category.image}`} alt="" />
                         ) :
                         (
                             <div className='flex flex-col items-center justify-center'>
