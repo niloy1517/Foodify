@@ -1,10 +1,6 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { storeContext } from '../../Context/Context';
 import { useContext } from 'react';
-import { useLocationRestaurants } from '../../Hooks/useLocationRestaurants';
-import { restaurantService } from '../../Services/restaurant.service';
 import { useNavigate } from 'react-router-dom';
 
 const DesktopFilterbar = ({ setShowFilteredRestaurants }) => {
@@ -61,7 +57,7 @@ const DesktopFilterbar = ({ setShowFilteredRestaurants }) => {
     }, [filters])
 
     return (
-        <div className='flex flex-col w-74 h-[80vh] border-1 border-gray-200 px-4 overflow-y-scroll shadow-2xl mt-20'>
+        <div className='flex flex-col w-62 h-[80vh] border-1 border-gray-200 px-4 overflow-y-scroll shadow-2xl mt-20'>
 
             {/* Header */}
             <div className='w-full flex justify-between items-center py-5'>

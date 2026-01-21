@@ -7,7 +7,7 @@ export const verifyPayment = async (req, res) => {
 
     // If payment proccessing failed then store failed data in paymentFailedData 
     const paymentFailedData = req.body
-console.log(paymentFailedData)
+
 
     try {
         const order = await userOrderModel.findOne({ transactionId: tranId })
@@ -65,6 +65,8 @@ console.log(paymentFailedData)
         res.redirect(`http://localhost:5173/payment-failed/${tranId}`)
     }
 }
+
+
 
 
 export const getOrderDetailsByTranId = async (req, res) => {

@@ -1,7 +1,7 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import { axiosInstance } from '../Api/axiosInstance'
 
 const UserDeliveryInfo = () => {
 
@@ -26,7 +26,7 @@ const UserDeliveryInfo = () => {
                 ...personalInfo,
                 userId: userData._id
             }
-            const response = await axios.put(`http://localhost:5000/api/user/profile/update`, payload, { withCredentials: true })
+            const response = await axiosInstance.put(`/user/profile/update`, payload, { withCredentials: true })
             if (response.data.success) {
                 toast.success(response.data.message)
                 response('response', response)
@@ -40,7 +40,7 @@ const UserDeliveryInfo = () => {
 
     const getUserDeliveryInfo = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/user/profile/data/${userData._id}`)
+            const response = await axiosInstance.get(`/user/profile/data/${userData._id}`)
             setPersonalInfo(response.data.data.profile)
         } catch (error) {
             console.log(error)

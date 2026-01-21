@@ -4,19 +4,19 @@ import { RxCross2 } from "react-icons/rx";
 import { PiClockCounterClockwise } from "react-icons/pi";
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
 import { RiSearchLine } from "react-icons/ri";
-import { AiOutlineDelete } from "react-icons/ai";
-import axios from 'axios';
 import { useContext } from 'react';
 import { storeContext } from '../Context/Context';
 import { useLocationRestaurants } from '../Hooks/useLocationRestaurants';
 import { restaurantService } from '../Services/restaurant.service';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { axiosInstance } from '../Api/axiosInstance';
 
 const SearchBar = ({ setHideDesktopFilterbar, setHideMainContent }) => {
     const { setRestaurants, setIsMobileFilterbarModal, isOverlay, setIsOverlay, filters, clearFilter } = useContext(storeContext);
 
     const { setCoordinates } = useLocationRestaurants()
-
+    const navigate = useNavigate()
+    const [searchParams, setSearchParams] = useSearchParams()
 
 
     const [suggestKeywordPopup, setSuggestKeywordPopup] = useState(false);
@@ -48,40 +48,39 @@ const SearchBar = ({ setHideDesktopFilterbar, setHideMainContent }) => {
     const userLocation = JSON.parse(localStorage.getItem('defaultLocation'))
 
     // Store search keyword in localStorage
-    localStorage.setItem('searchKeyword', JSON.stringify(queryKeyword))
+
+    useEffect(() => {
+        const searchQuery = searchParams.get('query')
+        console.log(searchQuery, 'search')
+        localStorage.setItem('searchKeyword', JSON.stringify(queryKeyword))
+    }, [queryKeyword])
 
 
     const saved = JSON.parse(localStorage.getItem('searchKeyword'))
 
-    useEffect(() => {
-        if (saved) {
-            setHideDesktopFilterbar(true);
-            setHideMainContent(true)
-        }
 
-        if (queryKeyword.length < 3) return;
-        const debounceTimer = setTimeout( async () => {
+    useEffect(() => {
+        if (!queryKeyword || queryKeyword === '') return
+
+        const getRestaurantsBySearch = async () => {
             let query = new URLSearchParams({
                 searchKeyword: queryKeyword,
                 lat: userLocation.lat,
                 lng: userLocation.lon,
             })
             try {
-                const response = await axios.get(`http://localhost:5000/api/restaurant/search?${query.toString()}`)
+                const response = await axiosInstance.get(`/restaurant/search?${query.toString()}`)
                 if (response.data.message) {
                     setRestaurants(response.data.data)
-                    query = ''
                 }
                 console.log(response)
             } catch (error) {
                 console.log(error)
             }
-        }, 300)
-
-        return () => clearTimeout(debounceTimer)
-
+        }
+        
+        getRestaurantsBySearch()
     }, [queryKeyword])
-
 
     const filterCounter = Object.values(filters).filter(f => f !== '').length;
 
@@ -182,21 +181,21 @@ const SearchBar = ({ setHideDesktopFilterbar, setHideMainContent }) => {
     }, [])
 
 
-    const navigate = useNavigate()
+    
 
 
 
     const baseUrl = `/restaurants/new?lat=${userLocation?.lat}&lng=${userLocation?.lon}`;
-
     const handleNavigate = (keyword) => {
         const queryString = new URLSearchParams({ 'query': keyword }).toString()
-        navigate(queryString ? `${baseUrl}&${queryString}` : baseUrl)
+        navigate(queryString ? `${baseUrl}&${queryString}` : baseUrl, { replace: true })
     }
 
+
     return (
-        <div className={`w-full relative`}>
+        <div className={`w-full relative px-4 md:px-8 xl:px-14`}>
             <div onClick={(e) => e.stopPropagation()} className=''>
-                <div className='w-full max-w-[800px] flex items-center pt-6 gap-4 text-gray-700'>
+                <div className='w-full lg:max-w-[800px] flex items-center pt-6 gap-4 text-gray-700'>
                     {
                         filterCounter === 0 &&
                         <div className='w-full h-16 md:h-18 flex items-center lg:text-[18px] px-3 rounded-3xl bg-gray-100'>
@@ -221,11 +220,9 @@ const SearchBar = ({ setHideDesktopFilterbar, setHideMainContent }) => {
                                         deleteFilterdRestaurants();
                                         setIsOverlay(false);
                                         setQueryKeyword('');
-                                        navigate(baseUrl);
+                                        handleNavigate('');
                                         setHideDesktopFilterbar(false);
                                         setHideMainContent(false);
-                                        setHideDesktopFilterbar(false);
-                                        setHideMainContent(false)
                                     }}
                                         className='cursor-pointer' />
                                 }
@@ -258,7 +255,7 @@ const SearchBar = ({ setHideDesktopFilterbar, setHideMainContent }) => {
                 </div>
 
 
-                <div className='w-full absolute'>
+                <div className='w-[95%] md:w-[92%] lg:max-w-[800px] fixed'>
                     {/* Recent & Popular Popups */}
                     <div ref={recentPopupRef} className='w-full z-10'>
                         {!queryKeyword && recentKeywordPopup &&
@@ -279,8 +276,6 @@ const SearchBar = ({ setHideDesktopFilterbar, setHideMainContent }) => {
                                                             handleNavigate(searchKeyword);
                                                             setHideDesktopFilterbar(true);
                                                             setHideMainContent(true);
-                                                            setHideDesktopFilterbar(true);
-                                                            setHideMainContent(true)
                                                         }}
                                                     >
                                                         <PiClockCounterClockwise className='text-[24px]' /> {searchKeyword}

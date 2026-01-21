@@ -7,7 +7,7 @@ export const restaurantService = {
     getAllRestaurantsName: () => axiosInstance.get('/restaurant/name'),
 
     //Get all restaurans by location
-    getNearBy: ({lat, lng}) => axiosInstance.get('/restaurant/all/restaurants', 
+    getNearBy: ({lat, lng}) => axiosInstance.get('/restaurant/nearby', 
         {
             params: {lat, lng}
         }

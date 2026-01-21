@@ -1,16 +1,15 @@
-import axios from 'axios'
 import React, { useContext } from 'react'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { IoMdTime } from "react-icons/io"
 import { MdOutlineDeliveryDining } from "react-icons/md"
 import { FaStar } from "react-icons/fa"
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { setRestaurantId } from '../Service/Redux/Slice/RestaurantSlice'
 import { PiDotOutlineFill } from "react-icons/pi";
 import { TbCurrencyTaka } from "react-icons/tb";
 import { storeContext } from '../Context/Context'
+import { axiosInstance } from '../Api/axiosInstance'
 
 const RestaurantFindByCategory = () => {
   const { categoryId } = useContext(storeContext)
@@ -18,10 +17,6 @@ const RestaurantFindByCategory = () => {
   const navigate = useNavigate()
 
   const [restaurants, setRestaurants] = useState([])
-
-  const userData = useSelector((state) => state.user.userData)
-
-
 
   const handleNavigate = (name) => {
     const slug = name.toLowerCase().replace(/\s+/g, '-')
@@ -35,8 +30,6 @@ const RestaurantFindByCategory = () => {
 
   const getRestaurants = async () => {
 
-    // const userLat = userData?.address[0]?.location?.coordinates[1]
-    // const userLng = userData?.address[0]?.location?.coordinates[0]
 
     const userLat = userLocation?.lat;
     const userLng = userLocation?.lon;
@@ -46,9 +39,10 @@ const RestaurantFindByCategory = () => {
       lat: userLat,
       lng: userLng
     })
-console.log(categoryId)    
+
+
     try {
-      const response = await axios.get(`http://localhost:5000/api/restaurant/search?${query.toString()}`)
+      const response = await axiosInstance.get(`/restaurant/search?${query.toString()}`)
       setRestaurants(response.data.data)
       console.log(response)
     } catch (error) {
@@ -59,6 +53,7 @@ console.log(categoryId)
   useEffect(() => {
     getRestaurants()
   }, [categoryId])
+
   return (
     <div className='w-full p-10'>
       <h1 className='text-3xl font-semibold text-gray-700 mb-10'>{restaurants?.length > 0 ? `${restaurants?.length} Restaurants found` : 'Restaurants Not Found'}</h1>

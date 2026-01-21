@@ -40,7 +40,6 @@ export const useLocationRestaurants = () => {
             try {
                 const response = await restaurantService.getNearBy({ lat: coordinates.lat, lng: coordinates.lng });
                 setRestaurants(response.data.data)
-                console.log(response)
             } catch (error) {
                 console.log(error);
             }
@@ -84,7 +83,7 @@ export const useLocationRestaurants = () => {
                     const data = await response.json();
                     setFullAddressData(data)
                     setSearchKey(data.display_name);
-                    localStorage.setItem('defaultLocation', JSON.stringify(data));
+                    // localStorage.setItem('defaultLocation', JSON.stringify(data));
                 } catch (err) {
                     console.error(err);
                 }
@@ -123,9 +122,7 @@ export const useLocationRestaurants = () => {
                         .join(', ');
 
                     setSearchKey(shortAddress || data.display_name);
-                    setFullAddressData(data)
-
-                    localStorage.setItem('defaultLocation', JSON.stringify(data));
+                    setFullAddressData(data);
                 } catch (err) {
                     console.error(err);
                 }

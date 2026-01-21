@@ -4,7 +4,8 @@ import SwiperSlider from '../components/SwiperSlider'
 import { restaurantService } from '../Services/restaurant.service'
 
 const PopularRestaurantsPage = () => {
-    const {restaurants} = useContext(storeContext);
+    const { isOverlay } = useContext(storeContext);
+
     const [restaurantList, setRestaurantList] = useState([]);
 
     const getAllRestaurants = async () => {
@@ -15,12 +16,12 @@ const PopularRestaurantsPage = () => {
             console.log(error);
         }
     }
-console.log(restaurantList)
+
     useEffect(() => {
         getAllRestaurants();
     }, [])
     return (
-        <div className='w-full px-4 md:px-10'>
+        <div className={`w-full px-4 md:px-10 relative ${isOverlay && '-z-10'}`}>
             <h1 className='text-3xl font-semibold text-gray-800 py-14'>Popular restaurants</h1>
             <SwiperSlider restaurants={restaurantList?.slice(0, 20)} />
         </div>

@@ -5,7 +5,6 @@ import { GrLocation } from "react-icons/gr";
 import { SlArrowDown } from "react-icons/sl";
 import { useSelector } from 'react-redux';
 import { storeContext } from '../../Context/Context';
-import FindFoodByLocationPopup from '../../AllPopupPages/FindFoodByLocationPopup';
 
 const DesktopNavbar = () => {
     const { setShowAuthenticationPopup, setLoginPopup, setIsLoginPage, setFindFoodByLocationPopup, setUserCartModal, isOverlay, setIsOverlay, isDropdownMenu, setIsDropdownMenu } = useContext(storeContext)

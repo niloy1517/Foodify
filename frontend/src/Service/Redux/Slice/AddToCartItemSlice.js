@@ -103,7 +103,6 @@ export const addToCartSlice = createSlice({
         },
         setCheckoutDetails: (state, action) => {
             state.checkoutDetails = action.payload;
-            console.log('checkoutData', action.payload)
         },
         deleteCartRestaurant: (state, action) => {
             const restaurantId = action.payload;
@@ -113,12 +112,20 @@ export const addToCartSlice = createSlice({
             state.carts[userId][restaurantId].items = [];
 
             state.allRestaurantData = state.allRestaurantData.filter(restaurantData => restaurantData._id !== restaurantId)
+        },
+        clearRestaurantCart: (state, action) => {
+            const { userId, restaurantId } = action.payload;
+
+            if (state.carts[userId] && state.carts[userId][restaurantId]) {
+                delete state.carts[userId][restaurantId]
+            }
+            state.allRestaurantData = state.allRestaurantData.filter(restaurantData => restaurantData._id !== restaurantId)
         }
     }
 })
 
 
-export const { setUser, addToCart, increment, decrement, deleteToCart, setCheckoutDetails, logoutUser, deleteCartRestaurant } = addToCartSlice.actions
+export const { setUser, addToCart, increment, decrement, deleteToCart, setCheckoutDetails, logoutUser, deleteCartRestaurant, clearRestaurantCart } = addToCartSlice.actions
 
 export default addToCartSlice.reducer
 

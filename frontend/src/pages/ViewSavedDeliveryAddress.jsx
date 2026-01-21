@@ -1,22 +1,20 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { GrLocation } from "react-icons/gr";
 import { AiOutlineDelete } from "react-icons/ai";
+import { toast } from 'react-toastify';
+import { axiosInstance } from '../Api/axiosInstance';
 
 const ViewSavedDeliveryAddress = ({setOpenMap, setEditDefaultDeliveryAddress, setShowSavedAddresses, setAddNewDeliveryAddress, setDeliveryAddress, setIsAddAddress }) => {
     const [saveAddressList, setSaveAddressList] = useState([])
-    const [savedAddress, setSavedAddress] = useState(false)
    
     const [selectedAddress, setSelectedAddress] = useState('')
     
-
-
     const userData = useSelector((state) => state.user.userData)
 
     const getDeliveryAddressList = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/user/profile/data/${userData._id}`)
+            const response = await axiosInstance.get(`api/user/profile/data/${userData._id}`)
             setSaveAddressList(response.data.data.address)
         } catch (error) {
             console.log(error)
@@ -25,7 +23,7 @@ const ViewSavedDeliveryAddress = ({setOpenMap, setEditDefaultDeliveryAddress, se
 
     const deleteDeliveryAddress = async (addressId) => {
         try {
-            const response = await axios.delete(`http://localhost:5000/api/user/delivery/address/delete/${addressId}`,
+            const response = await axiosInstance.delete(`/user/delivery/address/delete/${addressId}`,
                 {
                     data: { userId: userData._id },
                     withCredentials: true
@@ -55,7 +53,7 @@ const ViewSavedDeliveryAddress = ({setOpenMap, setEditDefaultDeliveryAddress, se
                             id=""
                             onClick={() => { setSelectedAddress(address._id), setDeliveryAddress(address) }}
                             checked={selectedAddress == address._id}
-                            className='w-6 h-6 cursor-pointer'
+                            className='w-6 h-6 cursor-pointer accent-orange-600'
                         />
                     </div>
                     <div className='w-full'>
@@ -74,7 +72,6 @@ const ViewSavedDeliveryAddress = ({setOpenMap, setEditDefaultDeliveryAddress, se
                                 <input
                                     type="text"
                                     placeholder=' '
-                                    
                                     value={address.riderNote}
                                     className="peer markdown-input text-gray-700 "
                                 />

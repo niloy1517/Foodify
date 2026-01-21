@@ -23,20 +23,17 @@ const Context = ({ children }) => {
 
   const [findFoodByLocationPopup, setFindFoodByLocationPopup] = useState(false)
 
-  const [searchRestaurants, setSearchRestaurants] = useState([])
 
   //Auto suggest search key address
   const [addressData, setAddressData] = useState('')
 
   const [isMobileFilterbarModal, setIsMobileFilterbarModal] = useState(false)
 
-  //Fitered restaurants shows
-  const [showFilteredRestaurant, setShowFilteredRestaurant] = useState(false)
 
   //Restaurants
   const [restaurants, setRestaurants] = useState([]);
 
-  //Category id for search category wise restaurants
+  //Category Id
   const [categoryId, setCategoryId] = useState('')
 
   //Global overlay state
@@ -53,7 +50,8 @@ const Context = ({ children }) => {
         sortBy: "",
         cuisine: "",
         rating: "",
-        priceOrder: ""
+        priceOrder: "",
+        category: ""
       }
 
   })
@@ -71,7 +69,6 @@ const Context = ({ children }) => {
 
   useEffect(() => {
     if (filters) {
-      console.log('filter', filters)
       localStorage.setItem('filters', JSON.stringify(filters))
     }
   }, [filters])
@@ -126,6 +123,7 @@ const Context = ({ children }) => {
     if (filters.cuisine) query.append('cuisine', filters.cuisine);
     if (filters.rating) query.append('rating', filters.rating);
     if (filters.priceOrder) query.append('priceOrder', filters.priceOrder);
+    if(filters.category) query.append('category', filters.category)
     if (userLat) query.append('lat', userLat);
     if (userLng) query.append('lng', userLng);
 
@@ -237,13 +235,13 @@ const Context = ({ children }) => {
     addressData, setAddressData,
     isMobileFilterbarModal, setIsMobileFilterbarModal,
     restaurants, setRestaurants,
-    categoryId, setCategoryId,
     isOverlay, setIsOverlay,
     isDropdownMenu, setIsDropdownMenu,
     filters, setFilters,
     updateFilter,
     clearFilter,
-    getFilteredRestaurants
+    getFilteredRestaurants,
+    categoryId, setCategoryId
   }
   return (
     <storeContext.Provider value={contextValue}>

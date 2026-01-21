@@ -1,6 +1,5 @@
 import React from 'react'
-import axios from 'axios';
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { storeContext } from '../Context/Context';
@@ -11,6 +10,7 @@ import { MdOutlineWorkOutline } from "react-icons/md";
 import { FaRegHeart } from "react-icons/fa6";
 import { IoMdAdd } from "react-icons/io";
 import { setNewDeliveryAddress } from '../Service/Redux/Slice/UserDataSlice';
+import { axiosInstance } from '../Api/axiosInstance';
 
 
 const UpdateDefaultDeliveryAddress = ({ editDefaultDeliveryAddress, isAddNewDeliveryAddress, setShowLatestDeliveryAddress, isAddAddress, setIsAddAddress, setLatestDeliveryAddress }) => {
@@ -41,7 +41,7 @@ const UpdateDefaultDeliveryAddress = ({ editDefaultDeliveryAddress, isAddNewDeli
                 userId: userData._id,
                 label: selectedLabel || ''
             }
-            const response = await axios.put(`http://localhost:5000/api/user/update/delivery/address`, payload, { withCredentials: true })
+            const response = await axiosInstance.put(`/user/update/delivery/address`, payload, { withCredentials: true })
             if (response.data.success) {
                 toast.success(response.data.message)
                 setSavedAddress(true)
@@ -61,7 +61,8 @@ const UpdateDefaultDeliveryAddress = ({ editDefaultDeliveryAddress, isAddNewDeli
                 userId: userData._id,
                 label: selectedLabel || ''
             }
-            const response = await axios.post(`http://localhost:5000/api/user/delivery/address/add`, payload, { withCredentials: true })
+            console.log(payload)
+            const response = await axiosInstance.post(`/user/delivery/address/add`, payload, { withCredentials: true })
             if (response.data.success) {
                 toast.success(response.data.message)
                 setSavedAddress(true)

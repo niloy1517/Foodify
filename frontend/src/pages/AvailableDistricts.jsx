@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { setDistrictId } from '../Service/Redux/Slice/DistrictSlice'
+import { axiosInstance } from '../Api/axiosInstance'
 
 
 const AvailableDistricts = () => {
@@ -13,7 +13,7 @@ const AvailableDistricts = () => {
 
     const getDistrictList = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/district/list`)
+            const response = await axiosInstance.get('/district/list')
             setDistricts(response.data.data)
         } catch (error) {
             console.log(error)

@@ -8,7 +8,6 @@ import { BiHelpCircle } from "react-icons/bi";
 import { MdLogout } from "react-icons/md";
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { storeContext } from '../../Context/Context';
 import { logoutUser } from '../../Service/Redux/Slice/AddToCartItemSlice';

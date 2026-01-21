@@ -1,8 +1,8 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { GrAdd } from "react-icons/gr";
 import { addToCart, setUser } from '../Service/Redux/Slice/AddToCartItemSlice';
+import { axiosInstance } from '../Api/axiosInstance';
 
 const RestaurantFoodList = () => {
     const restaurantId = useSelector((state) => state.restaurant.restaurantId)
@@ -16,12 +16,12 @@ const RestaurantFoodList = () => {
 
     const [categories, setCategories] = useState([])
     const [foods, setFoods] = useState([])
-    
+    const [orderData, setOrderData] = useState({})
 
-   
+
     const getRestaurantFoodList = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/food/list/${restaurantId}`)
+            const response = await axiosInstance.get(`/food/list/${restaurantId}`)
             setCategories(response.data.categories)
             setFoods(response.data.foods)
         } catch (error) {
@@ -29,8 +29,20 @@ const RestaurantFoodList = () => {
         }
     }
 
+    const getOrderData = async () => {
+        try {
+            const response = await axiosInstance.get(`/user/order/list/${userData._id}`)
+            const runingOrder = response?.data?.data.find(ord => ord.paymentStatus === 'Paid' && ord.orderStatus !== 'Completed')
+            setOrderData(runingOrder)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
     useEffect(() => {
-        getRestaurantFoodList()
+        getRestaurantFoodList();
+        getOrderData()
     }, [])
 
 
@@ -52,8 +64,8 @@ const RestaurantFoodList = () => {
                                 <div className='flex h-full relative'>
                                     <img className='p-2 size-40 h-full shrink-0 rounded-[20px]' src={`http://localhost:5000/images/${food.image}`} alt="" />
                                     <button
-                                    onClick={() => { dispatch(setUser(userId)), dispatch(addToCart({restaurantId, food, restaurantData})) }}
-                                    className='absolute bottom-3 right-[8%] flex items-center justify-center size-10 rounded-full bg-white hover:bg-gray-100 cursor-pointer'>
+                                        onClick={() => { dispatch(setUser(userId)), dispatch(addToCart({ restaurantId, food, restaurantData })) }}
+                                        className='absolute bottom-3 right-[8%] flex items-center justify-center size-10 rounded-full bg-white hover:bg-gray-100 cursor-pointer'>
                                         <GrAdd className='text-2xl text-gray-700' />
                                     </button>
                                 </div>

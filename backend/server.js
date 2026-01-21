@@ -15,7 +15,7 @@ import { query } from 'express-validator';
 import { categoriesModel } from './models/categories.model.js';
 import { restaurantModel } from './models/restaurant.model.js';
 import { foodModel } from './models/food.model.js';
-
+import './cron/autoCancelPendingOrders.js'
 
 
 dotenv.config()

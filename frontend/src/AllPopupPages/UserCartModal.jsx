@@ -4,11 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RiDeleteBinLine } from "react-icons/ri";
 import { useNavigate } from 'react-router-dom';
 import { deleteCartRestaurant, setCheckoutDetails } from '../Service/Redux/Slice/AddToCartItemSlice';
-import axios from 'axios';
 import { storeContext } from '../Context/Context';
+import { useOrderManager } from '../Hooks/useOrderManager'
 
 const UserCartModal = () => {
   const { setUserCartModal } = useContext(storeContext)
+
+  const { getOrderData } = useOrderManager()
+
   const carts = useSelector((state) => state.cart.carts);
   const allRestaurantData = useSelector((state) => state.cart.allRestaurantData);
   const userData = useSelector((state) => state.user.userData);
@@ -17,7 +20,11 @@ const UserCartModal = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-
+  useEffect(() => {
+    if (userData?._id) {
+      getOrderData();
+    }
+  }, [userData?._id]);
 
   return (
     <div className='h-[100vh] w-full md:w-[350px] overflow-y-auto top-0 slide-bar absolute z-20 right-0 mx-auto bg-white shadow'>
@@ -37,8 +44,6 @@ const UserCartModal = () => {
 
             const restaurantCart = carts[userId]?.[restaurantId];
             const items = restaurantCart?.items || [];
-
-
 
             // Skip restaurant if no items
             if (items.length === 0) return null;

@@ -7,35 +7,31 @@ import MobileFilterbarModal from '../Filterbar/MobileFilterbarModal'
 import AllRestaurantsPage from '../AllRestaurantsPage'
 import NewRestaurantsPage from '../NewRestaurantsPage'
 import FindFoodByLocation from '../FindFoodByLocation'
-import { useLocationRestaurants } from '../../Hooks/useLocationRestaurants'
 import DesktopFilterbar from '../Filterbar/DesktopFilterbar'
 import FilteredRestaurantsPage from '../FilteredRestaurantsPage'
-
+import NearbyRestaurants from '../NearbyRestaurants'
+import { useOrderManager } from '../../Hooks/useOrderManager'
+import { useSelector } from 'react-redux'
 
 const MainPage = () => {
-  const { findFoodByLocationPopup, setFindFoodByLocationPopup, isOverlay, isDropdownMenu, filters } = useContext(storeContext)
+  const { findFoodByLocationPopup, setFindFoodByLocationPopup, isOverlay, isDropdownMenu, filters, isMobileFilterbarModal } = useContext(storeContext)
+
+  const { getOrderData } = useOrderManager()
+
+  const userData = useSelector((state) => state.user.userData);
+
 
   const [showFilteredRestaurants, setShowFilteredRestaurants] = useState(false)
-  // const [showFilteredRestaurant, setShowFilteredRestaurant] = useState(false)
-  const { isMobileFilterbarModal } = useContext(storeContext)
-
-  const { setFullAddressData, setCoordinates } = useLocationRestaurants()
-
-  useEffect(() => {
-    // store user location from localStorage
-    const userLocation = JSON.parse(localStorage.getItem('defaultLocation'))
-    if (!userLocation) return;
-    setFullAddressData(userLocation)
-  }, [])
-
-
   const [isFiltered, setIsFiltered] = useState(false);
   const [hideDesktopFilterbar, setHideDesktopFilterbar] = useState(false);
-  const [hideSearchbar, setHideSearchbar] = useState(false);
   const [hideMainContent, setHideMainContent] = useState(false)
   const filterCounter = Object.values(filters).filter(f => f !== '').length;
 
-
+  useEffect(() => {
+    if (userData?._id) {
+      getOrderData();
+    }
+  }, [userData?._id]);
 
   return (
     <div className='w-full min-h-screen h-auto'>
@@ -53,26 +49,29 @@ const MainPage = () => {
         {/* Main content */}
         {
           filterCounter === 0 ?
-          <div className={`w-full grid grid-cols-1 px-4 md:px-8 xl:px-16 ${isDropdownMenu && '-z-10'} `}>
-            <SearchBar
-              setIsFiltered={setIsFiltered}
-              setHideDesktopFilterbar={setHideDesktopFilterbar}
-              setHideMainContent={setHideMainContent}
-            />
+            <div className={`w-full grid grid-cols-1  ${isDropdownMenu && '-z-10'} `}>
+              <SearchBar
+                setIsFiltered={setIsFiltered}
+                setHideDesktopFilterbar={setHideDesktopFilterbar}
+                setHideMainContent={setHideMainContent}
+              />
 
-            {
-              !hideMainContent ?
-              <div className={`mt-14 relative ${isOverlay && '-z-30'}`}>
-                <MenuCategory />
-                <NewRestaurantsPage />
-                <AllRestaurantsPage />
-              </div>
-              :
-              <FilteredRestaurantsPage />
-            }
-          </div>
-          :
-          <FilteredRestaurantsPage />
+              {
+                !hideMainContent ?
+                  <div className={`mt-14 relative px-4 md:px-8 xl:px-16 ${isOverlay && '-z-30'}`}>
+                    <MenuCategory />
+                    <NewRestaurantsPage />
+                    <NearbyRestaurants />
+                    <AllRestaurantsPage />
+                  </div>
+                  :
+                  <div className='px-0'>
+                    <FilteredRestaurantsPage />
+                  </div>
+              }
+            </div>
+            :
+            <FilteredRestaurantsPage />
         }
       </div>
 

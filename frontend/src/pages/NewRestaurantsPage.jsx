@@ -1,14 +1,29 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import SwiperSlider from '../components/SwiperSlider'
-import { storeContext } from '../Context/Context';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { restaurantService } from '../Services/restaurant.service';
 
 
 
 const NewRestaurantsPage = () => {
-  const { restaurants } = useContext(storeContext)
+  const [restaurants, setRestaurants] = useState([])
+
+  const allRestaurants = async () => {
+    try {
+      const response = await restaurantService.getAll();
+      setRestaurants(response.data.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    allRestaurants()
+  })
 
   if (!restaurants || restaurants.length === 0) {
-    return <p className='text-center text-2xl text-gray-700'>No restauant found</p>
+    return ;
   }
 
   return (

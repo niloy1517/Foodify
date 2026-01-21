@@ -1,19 +1,18 @@
 import React from 'react'
-import axios from 'axios';
 import { useContext, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { storeContext } from '../Context/Context';
-
-import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { GrLocation } from "react-icons/gr";
 import { TiHomeOutline } from "react-icons/ti";
 import { MdOutlineWorkOutline } from "react-icons/md";
 import { FaRegHeart } from "react-icons/fa6";
 import { IoMdAdd } from "react-icons/io";
+import { axiosInstance } from '../Api/axiosInstance';
 
 
 
-const DefaultDeliveryAddress = ({ setOpenMap, setEditDefaultDeliveryAddress, setShowSavedAddresses, setDeliveryAddress, latestDeliveryAddress }) => {
+const DefaultDeliveryAddress = ({ setOpenMap, setAddNewDeliveryAddress, setIsAddAddress, setEditDefaultDeliveryAddress, setShowSavedAddresses, setDeliveryAddress, latestDeliveryAddress }) => {
 
     const { coordinates } = useContext(storeContext)
     const { lat, lng } = coordinates;
@@ -28,7 +27,7 @@ const DefaultDeliveryAddress = ({ setOpenMap, setEditDefaultDeliveryAddress, set
 
     const getDefaultAddressData = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/user/profile/data/${userData._id}`)
+            const response = await axiosInstance.get(`/user/profile/data/${userData._id}`)
             setUserAddressData(response.data.data.address[0])
             setDeliveryAddress(response.data.data.address[0])
         } catch (error) {
@@ -40,16 +39,30 @@ const DefaultDeliveryAddress = ({ setOpenMap, setEditDefaultDeliveryAddress, set
         getDefaultAddressData()
     }, [latestDeliveryAddress])
 
+    if (!userAddressData)
+        return <div className='w-full bg-white p-6'>
+            <p className='text-[18px] font-semibold pb-2'>Where should we deliver your order?</p>
+            <p>Please add your delivery address to continue.</p>
+            <button onClick={() => {
+                setOpenMap(true);
+                setEditDefaultDeliveryAddress(true);
+                setAddNewDeliveryAddress(true);
+                setIsAddAddress(true)
+            }}
+                className='mt-4 px-4 py-1 bg-gray-100 rounded font-medium hover:bg-orange-300 cursor-pointer hover:text-white'>
+                + Add address
+            </button>
+        </div>
     return (
         <div className='w-full bg-white p-6'>
             <div className='flex justify-between items-center pb-4'>
                 <p className='lg:text-[20px] font-semibold'>Delivery address</p>
-                <button onClick={() => {setShowSavedAddresses(true)}} className='text-sm lg:text-[18px] font-medium cursor-pointer text-gray-600'>View Saved Address</button>
+                <button onClick={() => { setShowSavedAddresses(true) }} className='text-sm lg:text-[18px] font-medium cursor-pointer text-gray-600'>View Saved Address</button>
             </div>
             <div>
-                <MapContainer center={[lat, lng]} zoom={13} className="w-full h-50 relative z-0">
+                <MapContainer center={[userAddressData?.location?.coordinates[1] || lat, userAddressData?.location?.coordinates[0] || lng]} zoom={13} className="w-full h-50 relative z-0">
                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                    <Marker position={[lat, lng]} />
+                    <Marker position={[userAddressData?.location?.coordinates[1] || lat, userAddressData?.location?.coordinates[0] || lng]} />
                 </MapContainer>
             </div>
             <div className='flex items-center justify-between my-4 text-gray-600 border-b border-gray-200 pb-2'>

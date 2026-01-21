@@ -8,7 +8,7 @@ import { userOrderModel } from "../models/userOrder.model.js";
 const payment = async (req, res) => {
     try {
         const { user, customerName, email, phone, restaurant, restaurantName, subtotal, deliveryFee, total, items, address, riderNote } = req.body;
-console.log(items)
+        console.log(items)
         // CREATE PAYMENT TRX ID
         const tranId = new mongoose.Types.ObjectId().toString()
 
@@ -46,30 +46,25 @@ console.log(items)
             ship_country: 'Bangladesh',
         }
 
-        const order = await userOrderModel.findOneAndUpdate(
-            { user, paymentStatus: 'Pending' },
-            {
-                $setOnInsert: {
-                    orderId,
-                    user,
-                    customerName,
-                    email,
-                    phone,
-                    restaurant,
-                    restaurantName,
-                    subtotal,
-                    deliveryFee,
-                    total,
-                    items,
-                    address,
-                    riderNote,
-                    orderTime: new Date(),
-                    transactionId: tranId,
-                    paymentStatus: 'Pending'
-                }
-            },
-            { upsert: true, new: true }
-        )
+        const order = await userOrderModel.create({
+            orderId,
+            user,
+            customerName,
+            email,
+            phone,
+            restaurant,
+            restaurantName,
+            subtotal,
+            deliveryFee,
+            total,
+            items,
+            address,
+            riderNote,
+            orderTime: new Date(),
+            transactionId: tranId,
+            paymentStatus: 'Pending',
+            orderStatus: 'Pending'
+        })
 
         const response = await sslcz.init(data);
         return res.send({ paymentUrl: response.GatewayPageURL });

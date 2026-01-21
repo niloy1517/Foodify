@@ -10,10 +10,14 @@ import "swiper/css/navigation";
 import { storeContext } from '../Context/Context';
 
 const MenuCategory = () => {
-    const { setCategoryId } = useContext(storeContext)
     const [categories, setCategories] = useState([])
+    const { updateFilter, filters } = useContext(storeContext)
 
     const navigate = useNavigate()
+
+    // Store user location from localStorage
+    const defaultLocation = JSON.parse(localStorage.getItem('defaultLocation'))
+
 
     const getCategories = async () => {
         try {
@@ -30,8 +34,26 @@ const MenuCategory = () => {
 
 
 
+    const query = Object.fromEntries(
+        Object.entries(filters).filter(
+            ([_, value]) => value !== undefined && value !== null && value !== ""
+        )
+    )
+
+    const queryString = new URLSearchParams(query).toString()
+
+    const baseUrl = `/restaurants/new?lat=${defaultLocation?.lat}&lng=${defaultLocation?.lon}`;
+
+    useEffect(() => {
+        const handleNavigate = () => {
+            navigate(queryString ? `${baseUrl}&${queryString}` : baseUrl)
+        }
+
+        handleNavigate()
+    }, [filters])
+
     return (
-        <div className="max-w-[1000px] mx-auto">
+        <div className="w-full">
             <h1 className="text-3xl font-semibold text-gray-700 mb-8">Menu Category</h1>
 
             <div className="relative w-full">
@@ -58,9 +80,7 @@ const MenuCategory = () => {
                             key={index}
                             onClick={(e) => {
                                 e.stopPropagation();
-                                setCategoryId(cate._id);
-                                console.log(cate._id);
-                                // navigate(`/restaurants/${cate._id}`)
+                                updateFilter('category', cate._id)
                             }}
                             className="!w-[140px] !h-[180px] flex flex-col text-center shrink-0 cursor-pointer"
                         >

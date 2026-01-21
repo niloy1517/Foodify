@@ -95,6 +95,8 @@ const Profile = () => {
     for (let y = 1900; y <= new Date().getFullYear(); y++) years.push(y);
     for (let d = 1; d <= 31; d++) days.push(d);
 
+    const defaultLocation = JSON.parse(localStorage.getItem('defaultLocation'))
+
     const handleOnchange = (e) => {
         setUpdateProfileData({ ...updateProfileData, [e.target.name]: e.target.value })
         setUserAddressData({ ...userAddressData, [e.target.name]: e.target.value })
@@ -315,13 +317,13 @@ console.log(data)
         }
     }
     return (
-        <div className='bg-[#F8F8FA] w-full h-[100vh] flex gap-12 my-10 px-14'>
+        <div className='bg-[#F8F8FA] w-full h-[100vh] flex gap-12 py-10 px-14'>
             <ToastContainer />
             <div className='w-80 h-[50%] bg-white text-gray-800'>
                 <div className='flex justify-center mt-8'>
                     <img className='w-34 h-34 rounded-full' src={assets.profile_pic} alt="" />
                 </div>
-                <p className='text-center font-medium text-2xl mt-2 '>{userData.profile.name}</p>
+                <p className='text-center font-medium text-2xl mt-2 '>{userData?.profile?.name}</p>
                 <div className='flex flex-col gap-3 text-[20px] px-4 mt-12'>
                     <p className='flex gap-2 items-center'><TiShoppingCart /> Orders Placed: 12</p>
                     <p className='flex gap-2 items-center'><FaRegHeart /> Wishlist Items: 5</p>
@@ -452,7 +454,7 @@ console.log(data)
                             <div className='flex-1 flex flex-col gap-6'>
                                 <div className='flex flex-col gap-2'>
                                     <div className="relative flex-1">
-                                        <select name="label" id="label" value={userAddressData?.label} onChange={handleOnchange} className="peer markdown-input">
+                                        <select name="label" id="label" value={userAddressData?.label} className="peer markdown-input">
                                             <option value="" className='hidden'>Select...</option>
                                             <option value="home">Home</option>
                                             <option value="office">Office</option>
@@ -468,7 +470,7 @@ console.log(data)
                                         name='road'
                                         value={userAddressData?.road}
                                         placeholder=' '
-                                        onChange={handleOnchange}
+  
                                         className="peer markdown-input"
                                     />
                                     <label className="markdown-label">Road</label>
@@ -481,7 +483,7 @@ console.log(data)
                                         name='house'
                                         value={userAddressData?.house}
                                         placeholder=' '
-                                        onChange={handleOnchange}
+
                                         className="peer markdown-input"
                                     />
                                     <label className="markdown-label">House</label>
@@ -492,7 +494,7 @@ console.log(data)
                                         name='block'
                                         value={userAddressData?.block}
                                         placeholder=' '
-                                        onChange={handleOnchange}
+  
                                         className="peer markdown-input"
                                     />
                                     <label className="markdown-label">Block</label>
@@ -508,7 +510,7 @@ console.log(data)
                                             name='city'
                                             value={userAddressData?.city}
                                             placeholder=' '
-                                            onChange={handleOnchange}
+                    
                                             className="peer markdown-input"
                                         />
                                         <label className="markdown-label">City</label>
@@ -520,7 +522,7 @@ console.log(data)
                                         name='district'
                                         value={userAddressData?.district}
                                         placeholder=' '
-                                        onChange={handleOnchange}
+                   
                                         className="peer markdown-input"
                                     />
                                     <label className="markdown-label">District</label>
@@ -533,7 +535,7 @@ console.log(data)
                                         name='postalCode'
                                         value={userAddressData?.postalCode}
                                         placeholder=' '
-                                        onChange={handleOnchange}
+                               
                                         className="peer markdown-input"
                                     />
                                     <label className="markdown-label">Postal code</label>
@@ -544,7 +546,7 @@ console.log(data)
                                         name='country'
                                         value={userAddressData?.country}
                                         placeholder=' '
-                                        onChange={handleOnchange}
+                            
                                         className="peer markdown-input"
                                     />
                                     <label className="markdown-label">Country</label>
@@ -558,7 +560,7 @@ console.log(data)
                                     name='subLocation'
                                     placeholder=' '
                                     value={userAddressData?.subLocation}
-                                    onChange={handleOnchange}
+                           
                                     className="peer markdown-input"
                                 />
                                 <label className="markdown-label">Location</label>

@@ -1,10 +1,11 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { assets } from '../assets/assets'
 import { LuLocateFixed } from "react-icons/lu";
 import { CiSearch } from "react-icons/ci";
 import DotLoading from '../Loading/DotLoading/DotLoading';
 import { useNavigate } from 'react-router-dom';
 import { useLocationRestaurants } from '../Hooks/useLocationRestaurants';
+import { storeContext } from '../Context/Context';
 
 const Hero = () => {
   const {
@@ -16,7 +17,9 @@ const Hero = () => {
     setFullAddressData,
     saveAddressInLocalStorage,
     locateLocation
-  } = useLocationRestaurants()
+  } = useLocationRestaurants();
+
+  const { isOverlay } = useContext(storeContext);
 
   const [loading, setLoading] = useState(false)
 
@@ -34,8 +37,15 @@ const Hero = () => {
       }, 2000)
   }
 
+
+  useEffect(() => {
+    if (defaultLocation) {
+      navigate(`/restaurants/new?lat=${defaultLocation?.lat}&lng=${defaultLocation?.lon}`)
+    }
+  }, [])
+
   return (
-    <div className='w-full h-auto relative'>
+    <div className={`w-full h-auto relative ${isOverlay && '-z-10'}`}>
       <img
         className='w-full h-auto object-cover max-h-[600px]'
         src={assets.banner}

@@ -44,7 +44,7 @@ const updateProfileData = async (req, res) => {
 
 const userAddressAdd = async (req, res) => {
     try {
-        const { userId, label, house, road, block, city, district, postalCode, country, subLocation, location } = req.body;
+        const { userId, street, label, house, road, block, city, district, postalCode, country, subLocation, location } = req.body;
 
         const user = await userModel.findById(userId)
 
@@ -55,7 +55,7 @@ const userAddressAdd = async (req, res) => {
             })
         }
 
-        user.address = { label, house, road, block, city, district, postalCode, country, subLocation, location }
+        user.address = { label, street, house, road, block, city, district, postalCode, country, subLocation, location }
 
         user.save()
 

@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { assets } from '../assets/assets'
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import { axiosInstance } from '../Api/axiosInstance';
 
 const PaymentFailed = () => {
-  const { id } = useParams()
+  const { id } = useParams();
   const tranId = id;
 
 
-  const [order, setOrder] = useState({})
+  const [order, setOrder] = useState({});
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const getOrderPaymentData = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/payment/order/details/${tranId}`)
-      setOrder(response.data.data)
-      console.log(response)
+      const response = await axiosInstance.get(`/payment/order/details/${tranId}`);
+      setOrder(response.data.data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -32,8 +31,15 @@ const PaymentFailed = () => {
   })
 
   useEffect(() => {
-    getOrderPaymentData()
+    getOrderPaymentData();
   }, [])
+
+
+  const defaultLocation = JSON.parse(localStorage.getItem('defaultLocation'));
+
+  const handleNavigate = () => {
+    navigate(`/restaurants/new?lat=${defaultLocation?.lat}&lng=${defaultLocation?.lon}`);
+  }
 
   return (
     <div className='w-full flex justify-center '>
@@ -54,7 +60,7 @@ const PaymentFailed = () => {
         </div>
         <div className='flex justify-center items-center gap-10 text-[18px] font-semibold'>
           <button className='py-2 px-10 rounded cursor-pointer bg-orange-600 text-white'>Try Payment Again</button>
-          <button onClick={() => navigate('/restaurants')} className='py-2 px-10 rounded cursor-pointer bg-gray-600 text-white'>Back to Home</button>
+          <button onClick={handleNavigate} className='py-2 px-10 rounded cursor-pointer bg-gray-600 text-white'>Back to Home</button>
         </div>
         <p className='text-center font-medium text-gray-500 mx-4 flex-wrap text-[14px] pt-4 border-t border-gray-200 mt-8'>Your order will be processed within 10 minutes. A confirmation email has been sent to customer@example.com. For any questions, <a href="#" className='hover:text-blue-500'>contact our support team</a>.</p>
       </div>

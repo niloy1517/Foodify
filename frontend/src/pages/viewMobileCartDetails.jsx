@@ -1,23 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { assets } from '../assets/assets';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoIosAdd } from "react-icons/io";
 import { GrFormSubtract } from "react-icons/gr";
 import { RiDeleteBinLine } from "react-icons/ri";
-import { FaCheckCircle } from "react-icons/fa";
-import { GrRestaurant } from "react-icons/gr";
-import { MdRestaurant } from "react-icons/md";
-import { GoDotFill } from "react-icons/go";
-import { BsClockFill } from "react-icons/bs";
-import { IoStar } from "react-icons/io5";
-import { FaLock } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
-
 import { decrement, increment, deleteToCart, setCheckoutDetails } from '../Service/Redux/Slice/AddToCartItemSlice';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { storeContext } from '../Context/Context';
+import { axiosInstance } from '../Api/axiosInstance';
 
 const viewMobileCartDetails = () => {
+    const {setLoginPopup, setShowAuthenticationPopup} = useContext(storeContext)
     const carts = useSelector((state) => state.cart.carts);
     const restaurantId = useSelector((state) => state.restaurant.restaurantId);
     const restaurantData = useSelector((state) => state.restaurant.restaurantData);
@@ -37,8 +31,6 @@ const viewMobileCartDetails = () => {
     const total = subtotal + deliveryFee;
 
     const [loading, setLoading] = useState(false)
-    const [showCart, setShowCart] = useState(true)
-
 
     const [activeBtn, setActiveBtn] = useState('delivery');
     const [orderData, setOrderData] = useState({});
@@ -62,7 +54,7 @@ const viewMobileCartDetails = () => {
 
     const getOrderData = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/user/order/list/${userData?._id}`)
+            const response = await axiosInstance.get(`/user/order/list/${userData?._id}`)
             const runingOrder = response?.data?.data.find(ord => ord.paymentStatus === 'Paid' && ord.orderStatus !== 'Completed')
             setOrderData(runingOrder)
         } catch (error) {
@@ -76,7 +68,7 @@ const viewMobileCartDetails = () => {
     return (
         <div className='w-full h-screen overflow-y-auto flex flex-col'>
 
-            <div className='flex justify-between px-4 py-6'>
+            <div className='flex justify-between px-4 pt-6 pb-2 border-b border-gray-200'>
                 <div className='text-gray-700'>
                     <p className='text-2xl font-semibold'>Cart</p>
                     <p>Moduban</p>
@@ -90,21 +82,7 @@ const viewMobileCartDetails = () => {
                 {
                     items.length !== 0 ?
                         <div>
-                            {/* Toggle Buttons */}
-                            <div className='w-full flex items-center justify-center gap-4 py-4 px-4 rounded-[8px] bg-gray-100'>
-                                <button
-                                    onClick={() => setActiveBtn('delivery')}
-                                    className={`w-full h-12 border border-gray-300 rounded-[8px] font-medium text-[18px] cursor-pointer hover:bg-orange-100 ${activeBtn === 'delivery' ? 'bg-white' : ''}`}
-                                >
-                                    Delivery
-                                </button>
-                                <button
-                                    onClick={() => setActiveBtn('deliveryInfo')}
-                                    className={`w-full h-12 border border-gray-300 rounded-[8px] font-medium text-[18px] cursor-pointer hover:bg-orange-100 ${activeBtn === 'deliveryInfo' ? 'bg-white' : ''}`}
-                                >
-                                    Delivery Info
-                                </button>
-                            </div>
+                           
 
                             <div className='h-full flex flex-col justify-between'>
 
@@ -174,6 +152,10 @@ const viewMobileCartDetails = () => {
                                         onClick={() => {
                                             dispatch(setCheckoutDetails({ restaurantData, items }));
                                             navigate('/checkout');
+                                            if (!userData) {
+                                                setShowAuthenticationPopup(true)
+                                                setLoginPopup(true)
+                                            }
                                         }}
                                         className='w-full h-12 mt-2 cursor-pointer font-medium text-[18px] bg-orange-600 text-white rounded'
                                     >

@@ -1,7 +1,7 @@
-import axios from 'axios'
 import React, { useEffect } from 'react'
 import { GrLocation } from "react-icons/gr";
 import { useSelector } from 'react-redux';
+import { axiosInstance } from '../Api/axiosInstance';
 
 const LatestDeliveryAddress = ({ setLatestDeliveryAddress, latestDeliveryAddress, isAddAddress, setDeliveryAddress, editDefaultDeliveryAddress, setEditDefaultDeliveryAddress }) => {
 
@@ -10,7 +10,7 @@ const LatestDeliveryAddress = ({ setLatestDeliveryAddress, latestDeliveryAddress
 
     const getLatestDeliveryAddress = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/user/profile/data/${userData._id}`)
+            const response = await axiosInstance.get(`/user/profile/data/${userData._id}`)
             if (!isAddAddress) {
                 setLatestDeliveryAddress(response.data.data.address[0])
                 setDeliveryAddress(response.data.data.address[0])

@@ -3,7 +3,6 @@ import MobileNavbar from './MobileNavbar'
 import DesktopNavbar from './DesktopNavbar'
 import { storeContext } from '../../Context/Context'
 import Authentication from '../../Authentication/Authentication'
-
 import ProfileModal from './ProfileModal'
 import ProfileDropdown from './ProfileDropdown'
 import UserCartModal from '../../AllPopupPages/UserCartModal'

@@ -1,12 +1,11 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-
 import { FaRegCalendar } from "react-icons/fa6";
 import { GrRestaurant } from "react-icons/gr";
 import { IoStarOutline } from "react-icons/io5";
 import { LiaFileInvoiceSolid } from "react-icons/lia";
 import { TbReload } from "react-icons/tb";
 import { useSelector } from 'react-redux';
+import { axiosInstance } from '../Api/axiosInstance';
 
 const OrderList = () => {
     const [orderList, setOrderList] = useState([])
@@ -16,9 +15,8 @@ const OrderList = () => {
 
     const getUserOrderList = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/user/order/list/${userData._id}`)
-            setOrderList(response.data.data.reverse())
-            console.log(response.data.data)
+            const response = await axiosInstance.get(`/user/order/list/${userData._id}`);
+            setOrderList(response.data.data.reverse());
         } catch (error) {
             console.log(error)
         }

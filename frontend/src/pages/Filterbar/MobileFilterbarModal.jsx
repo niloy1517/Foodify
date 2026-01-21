@@ -3,14 +3,10 @@ import { IoCloseOutline } from "react-icons/io5";
 import { useContext } from 'react'
 import { storeContext } from '../../Context/Context'
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import axios from 'axios';
-import { useEffect } from 'react';
-import { restaurantService } from '../../Services/restaurant.service';
 import { useNavigate } from 'react-router-dom';
 
 const MobileFilterbarModal = ({ setShowFilteredRestaurants, setIsFiltered }) => {
-  const { setIsMobileFilterbarModal, setRestaurants, filters, setFilters, updateFilter, getFilteredRestaurants, clearFilter } = useContext(storeContext)
+  const { setIsMobileFilterbarModal, filters, updateFilter, getFilteredRestaurants, clearFilter } = useContext(storeContext)
 
 
   

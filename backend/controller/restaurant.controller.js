@@ -1,16 +1,19 @@
 import { restaurantModel } from "../models/restaurant.model.js";
+
 import fs from 'fs'
 import { type } from "os";
 import path from 'path'
 import { getRestaurantFoodList } from "./food.controller.js";
 
-
+import { categoriesModel } from "../models/categories.model.js"
+import mongoose from "mongoose";
+import { pipeline } from "stream";
 
 const addRestaurant = async (req, res) => {
     const restaurantData = JSON.parse(req.body.restaurantData)
     const { restaurantName, ownerName, email, phone, description, address, city, zipcode, deliveryRadius, longitude, latitude, cuisines, status, deliveryTime, deliveryFee, openingTime, closingTime, district } = restaurantData;
     const cuisinesArray = JSON.parse(cuisines)
-   
+
     const image = req.file?.filename;
 
     if (!restaurantName || !ownerName || !email || !phone || !description || !image || !address || !city || !zipcode || !deliveryRadius || !longitude || !latitude || !cuisinesArray || !status || !deliveryTime || !deliveryFee || !openingTime || !closingTime || !district) {
@@ -33,7 +36,7 @@ const addRestaurant = async (req, res) => {
         const restaurant = new restaurantModel({
             restaurantName, ownerName, email, phone, description, image, address, city, zipcode,
             deliveryRadius: Number(deliveryRadius),
-            cuisines: cuisinesArray, 
+            cuisines: cuisinesArray,
             status, deliveryTime, deliveryFee, openingTime, closingTime, longitude, latitude, district,
             location: {
                 type: 'Point',
@@ -156,6 +159,42 @@ const getRestaurant = async (req, res) => {
     }
 }
 
+const getNearbyRestaurants = async (req, res) => {
+    const { lat, lng } = req.query;
+    console.log(lng, lat, 'asfjalsjfladsf')
+    try {
+        const pipeline = [];
+
+        pipeline.push({
+            $geoNear: {
+                near: {
+                    type: 'Point',
+                    coordinates: [Number(lng), Number(lat)]
+                },
+                distanceField: 'distance',
+                maxDistance: 20000,
+                spherical: true
+
+            }
+        })
+
+        pipeline.push({
+            $addFields: {
+                canDeliver: {
+                    $lte: ['$distance', { $multiply: ['$deliveryRadius', 1000] }]
+                }
+            }
+        })
+
+        
+        const restaurants = await restaurantModel.aggregate(pipeline)
+
+        res.status(200).json({ success: true, message: 'Restaurants found successfuly', data: restaurants })
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Restaurants found failed' })
+    }
+}
+
 
 const districtWiseRestaurant = async (req, res) => {
     const districtId = req.params.id;
@@ -179,7 +218,7 @@ const getRestaurantsName = async (req, res) => {
             {},
             { restaurantName: 1, cuisines: 1, _id: 0 }
         )
-        
+
         res.json({ success: true, message: 'Data found', data: restaurantList })
     } catch (error) {
         res.json({ success: false, message: 'Data not found' })
@@ -189,7 +228,7 @@ const getRestaurantsName = async (req, res) => {
 const filterRestaurantsByDistance = async (req, res) => {
     try {
         const { lat, lng } = req.query;
-        console.log('iam from filter', lat, lng)
+
         const latNum = parseFloat(lat);
         const lngNum = parseFloat(lng);
 
@@ -235,23 +274,12 @@ const filterRestaurantsByDistance = async (req, res) => {
 
 
 
-
-
-
 const getFilteredRestaurants = async (req, res) => {
     const {
-        categoryId,
-        searchKeyword,
-        sortBy,
-        cuisine,
-        rating,
-        priceOrder,
-        distance,
-        lat,
-        lng
+        category, searchKeyword, sortBy, cuisine,
+        rating, priceOrder, distance, lat, lng
     } = req.query;
-    console.log(req.query)
-
+console.log(req.query)
     try {
         const matchQuery = {}
 
@@ -263,9 +291,10 @@ const getFilteredRestaurants = async (req, res) => {
             matchQuery.cuisines = { $regex: cuisine, $options: "i" }
         }
 
-        const pipeline = []
 
-        if (searchKeyword) {
+        const pipeline = [];
+
+        if (category || searchKeyword || priceOrder) {
             pipeline.push({
                 $lookup: {
                     from: 'foods',
@@ -274,7 +303,25 @@ const getFilteredRestaurants = async (req, res) => {
                     as: 'foods'
                 }
             })
+        }
 
+
+
+        if (category) {
+            pipeline.push({
+                $match: {
+                    foods: {
+                        $elemMatch: {
+                            category: new mongoose.Types.ObjectId(category)
+                        }
+                    }
+                }
+            })
+
+        }
+
+
+        if (searchKeyword) {
             pipeline.push({
                 $addFields: {
                     foods: {
@@ -291,9 +338,9 @@ const getFilteredRestaurants = async (req, res) => {
             pipeline.push({
                 $match: {
                     $or: [
-                        {restaurantName: searchKeyword},
-                        {cuisines: {$regex: searchKeyword, $options: 'i'}},
-                        {foods: {$regex: searchKeyword, $options: 'i'}}
+                        { restaurantName: searchKeyword },
+                        { cuisines: { $regex: searchKeyword, $options: 'i' } },
+                        { foods: { $regex: searchKeyword, $options: 'i' } }
                     ]
                 }
             })
@@ -324,18 +371,7 @@ const getFilteredRestaurants = async (req, res) => {
             pipeline.push({ $sort: { deliveryTime: 1 } })
         }
 
-
-
         if (priceOrder) {
-            pipeline.push({
-                $lookup: {
-                    from: 'foods',
-                    localField: '_id',
-                    foreignField: 'restaurant',
-                    as: 'foods'
-                }
-            });
-
             pipeline.push({
                 $addFields: {
                     avgPrice: { $avg: '$foods.price' }
@@ -351,14 +387,38 @@ const getFilteredRestaurants = async (req, res) => {
 
 
 
+        // pipeline.push({
+        //     $geoNear: {
+        //         near: {
+        //             type: 'Point',
+        //             coordinates: [Number(lng), Number(lat)]
+        //         },
+        //         distanceField: 'distance',
+        //         maxDistance: distance ? Number(distance) * 1000 : 5000,
+        //         spherical: true,
+        //         query: matchQuery
+        //     }
+        // })
 
-        const restaurants = await restaurantModel.aggregate(pipeline)
 
+        const restaurants = await restaurantModel.aggregate(pipeline);
 
-        res.status(200).json({ success: true, message: 'Restaurants filtered successful', data: restaurants })
+        res.status(200).json({
+            success: true,
+            message: "Restaurants filtered successfully",
+            data: restaurants
+        });
+
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Restaurants not found' })
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch restaurants"
+        });
     }
-}
+};
 
-export { addRestaurant, deleteRestaurant, updateRestaurant, getRestaurants, getRestaurant, districtWiseRestaurant, filterRestaurantsByDistance, getRestaurantsName, getFilteredRestaurants }
+
+
+
+export { addRestaurant, deleteRestaurant, updateRestaurant, getRestaurants, getRestaurant, districtWiseRestaurant, filterRestaurantsByDistance, getRestaurantsName, getFilteredRestaurants, getNearbyRestaurants }

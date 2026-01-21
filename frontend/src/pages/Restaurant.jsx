@@ -3,9 +3,11 @@ import RestaurantFoodList from './RestaurantFoodList'
 import AddToCartBox from './AddToCartBox'
 import MobileCartPopup from './MobileCartPopup'
 import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { useOrderManager } from '../Hooks/useOrderManager'
 
 const Restaurant = () => {
-
+  const { getOrderData } = useOrderManager()
   const carts = useSelector((state) => state.cart.carts);
 
   const restaurantId = useSelector((state) => state.restaurant.restaurantId);
@@ -17,6 +19,12 @@ const Restaurant = () => {
   const userCart = carts?.[userId] || {};
   const restaurantCart = userCart?.[restaurantId] || {};
   const items = restaurantCart?.items || [];
+
+  useEffect(() => {
+    if (userData?._id) {
+      getOrderData();
+    }
+  }, [userData?._id]);
 
   return (
     <div>

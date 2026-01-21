@@ -1,5 +1,4 @@
 import { createBrowserRouter } from 'react-router-dom'
-
 import MainLayout from '../MainLayout/MainLayout'
 import App from '../App'
 import Profile from '../pages/Profile'
@@ -10,8 +9,8 @@ import MainPage from '../pages/MainPage/MainPage'
 import PaymentSuccessfull from '../pages/PaymentSuccessfull'
 import PaymentFailed from '../pages/PaymentFailed'
 import viewMobileCartDetails from '../pages/viewMobileCartDetails'
-import FilteredRestaurantsPage from '../pages/FilteredRestaurantsPage'
 import Checkout from '../pages/Checkout'
+
 
 
 const route = createBrowserRouter([
@@ -28,7 +27,6 @@ const route = createBrowserRouter([
             { path: `/restaurants/new`, Component: MainPage },
             { path: `/payment-success/:id`, Component: PaymentSuccessfull },
             { path: '/payment-failed/:id', Component: PaymentFailed },
-            // { path: '/restaurants/new', Component: FilteredRestaurantsPage }
         ]
     },
 
