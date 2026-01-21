@@ -40,16 +40,8 @@ const Footer = () => {
         <div>
           <h3 className="text-lg font-semibold mb-3">Download App</h3>
           <div className="flex flex-col gap-3">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Google_Play_Store_badge_EN.svg"
-              className="w-36 cursor-pointer"
-              alt="google-play"
-            />
-            <img
-              src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
-              className="w-36 cursor-pointer"
-              alt="app-store"
-            />
+          
+            
           </div>
         </div>
       </div>

@@ -11,6 +11,7 @@ const AllRestaurantsPage = () => {
     const allRestaurants = async () => {
         try {
             const response = await restaurantService.getAll();
+            console.log(restaurantService.getAll())
             setRestaurants(response.data.data)
         } catch (error) {
             console.log(error)

@@ -27,28 +27,6 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
 
-// const allowedOrigins = [
-//     'http://localhost:5173',
-//     'http://localhost:5174',
-//     'http://localhost:5175'
-// ]
-
-
-// const corsOption = {
-//     origin: function (origin, callback) {
-//         if (!origin) return callback(null, true)
-
-//         if (allowedOrigins.includes(origin)) {
-//             callback(null, true)
-//         } else {
-//             callback(new Error("Not allowed by CORS"))
-//         }
-//     },
-//     credentials: true
-// }
-
-// app.use(cors(corsOption))
-
 
 const allowedOrigins = [
     'http://localhost:5173',

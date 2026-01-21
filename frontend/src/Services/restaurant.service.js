@@ -1,8 +1,12 @@
 import { axiosInstance } from "../Api/axiosInstance"
 
+
+console.log('axiosInstance baseURL:', axiosInstance.defaults.baseURL)
+
+
 export const restaurantService = {
     getAll: () => axiosInstance.get('/restaurant/list'),
-    
+  
     //Get all restaurants
     getAllRestaurantsName: () => axiosInstance.get('/restaurant/name'),
 
